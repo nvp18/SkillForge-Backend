@@ -1,4 +1,4 @@
-package com.canvas.backend.controllers;
+package com.skillforge.backend.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.canvas.backend.entity;
+package com.skillforge.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @Entity
-@Table(name ="users")
+@Table(name ="Users")
 public class User implements UserDetails {
 
     @Id
@@ -23,22 +23,22 @@ public class User implements UserDetails {
     @Column(name = "userid")
     private String userId;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true, nullable = false, length = 20)
     private String username;
 
-    @Column(name = "firstname")
+    @Column(name = "firstname", nullable = false, length = 40)
     private String firstName;
 
-    @Column(name = "lastname")
+    @Column(name = "lastname", nullable = false, length = 40)
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true, length = 20)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 20)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     @Override

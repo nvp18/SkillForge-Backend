@@ -1,13 +1,13 @@
-package com.canvas.backend;
+package com.skillforge.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CanvasApplication {
+public class SkillForgeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CanvasApplication.class, args);
+		SpringApplication.run(SkillForgeApplication.class, args);
 	}
 
 }

@@ -1,10 +1,12 @@
-package com.canvas.backend.service.impl;
+package com.skillforge.backend.service.impl;
 
-import com.canvas.backend.config.JwtService;
-import com.canvas.backend.dto.UserDTO;
-import com.canvas.backend.entity.User;
-import com.canvas.backend.repository.UserRepository;
-import com.canvas.backend.service.UserInterface;
+import com.skillforge.backend.config.JwtService;
+import com.skillforge.backend.dto.UserDTO;
+import com.skillforge.backend.entity.User;
+import com.skillforge.backend.repository.UserRepository;
+import com.skillforge.backend.service.UserInterface;
+import com.skillforge.backend.utils.ROLES;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,17 +40,25 @@ public class UserService implements UserInterface {
     }
 
     @Override
-    public UserDTO register(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
         User user = new User();
+        String randomPassword = generatePassword();
         user.setUsername(userDTO.getUserName());
-        user.setPassword(encoder.encode(userDTO.getPassword()));
+        user.setPassword(encoder.encode(randomPassword));
         user.setEmail(userDTO.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setRole("STUDENT");
+        user.setRole(ROLES.STUDENT.toString());
         User savedUser = repository.save(user);
         userDTO.setUserId(savedUser.getUserId());
         userDTO.setRole(savedUser.getRole());
+        userDTO.setPassword(randomPassword);
         return userDTO;
+    }
+
+    private String generatePassword() {
+        String characters = "abcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_.";
+        String password = RandomStringUtils.random( 15, characters );
+        return password;
     }
 }

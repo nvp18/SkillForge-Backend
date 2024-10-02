@@ -1,10 +1,11 @@
-package com.canvas.backend.controllers;
+package com.skillforge.backend.controllers;
 
-import com.canvas.backend.dto.UserDTO;
-import com.canvas.backend.service.impl.UserService;
+import com.skillforge.backend.dto.UserDTO;
+import com.skillforge.backend.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +26,14 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-        UserDTO registeredDTO = userService.register(userDTO);
-        if(registeredDTO!=null) {
-            return ResponseEntity.status(HttpStatus.OK).body("User Registered");
+    @PostMapping("/createUser")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity createUser(@RequestBody UserDTO userDTO) {
+        UserDTO createUser = userService.createUser(userDTO);
+        if(createUser!=null) {
+            return ResponseEntity.status(HttpStatus.OK).body(createUser);
         } else {
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not Registered");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not created");
         }
     }
 }

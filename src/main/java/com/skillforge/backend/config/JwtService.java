@@ -1,4 +1,4 @@
-package com.canvas.backend.config;
+package com.skillforge.backend.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

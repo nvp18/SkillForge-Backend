@@ -1,7 +1,7 @@
-package com.canvas.backend.service.impl;
+package com.skillforge.backend.service.impl;
 
-import com.canvas.backend.entity.User;
-import com.canvas.backend.repository.UserRepository;
+import com.skillforge.backend.entity.User;
+import com.skillforge.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

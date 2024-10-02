@@ -1,4 +1,4 @@
-package com.canvas.backend.utils;
+package com.skillforge.backend.utils;
 
 public enum ROLES {
     STUDENT,

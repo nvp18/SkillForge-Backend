@@ -1,4 +1,4 @@
-package com.canvas.backend.dto;
+package com.skillforge.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
