@@ -3,12 +3,15 @@ package com.skillforge.backend.service.impl;
 import com.skillforge.backend.config.JwtService;
 import com.skillforge.backend.dto.UserDTO;
 import com.skillforge.backend.entity.User;
+import com.skillforge.backend.exception.UserNotAuthenticatedException;
+import com.skillforge.backend.exception.UserNotFoundException;
 import com.skillforge.backend.repository.UserRepository;
 import com.skillforge.backend.service.UserInterface;
 import com.skillforge.backend.utils.ROLES;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,17 +36,21 @@ public class UserService implements UserInterface {
 
     @Override
     public Map<String,Object> login(String userName, String password) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(userName,password));
-        Map<String,Object> user = new HashMap<>();
-        if(authentication.isAuthenticated()) {
-            String role = repository.findUserRole(userName);
-            String jwtToken = jwtService.generateToken(userName);
-            user.put("Role",role);
-            user.put("Token",jwtToken);
-            return user;
-        } else {
-            return user;
+        try {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(userName, password));
+            if (authentication.isAuthenticated()) {
+                Map<String,Object> user = new HashMap<>();
+                String role = repository.findUserRole(userName);
+                String jwtToken = jwtService.generateToken(userName);
+                user.put("Role", role);
+                user.put("Token", jwtToken);
+                return user;
+            } else {
+                throw new UserNotAuthenticatedException();
+            }
+        } catch (BadCredentialsException b) {
+            throw new UserNotFoundException();
         }
     }
 

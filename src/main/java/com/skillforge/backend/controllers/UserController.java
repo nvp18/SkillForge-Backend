@@ -22,12 +22,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String,Object>> login(@RequestBody UserDTO userDTO) {
         Map<String,Object> token = userService.login(userDTO.getUserName(),userDTO.getPassword());
-        if(!token.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(token);
-        } else {
-            token.put("message","User Not Found");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(token);
-        }
+        return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/createUser")
