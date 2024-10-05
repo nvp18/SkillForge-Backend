@@ -48,7 +48,7 @@ public class UserService implements UserInterface {
         user.setEmail(userDTO.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setRole(ROLES.STUDENT.toString());
+        user.setRole(ROLES.EMPLOYEE.toString());
         User savedUser = repository.save(user);
         userDTO.setUserId(savedUser.getUserId());
         userDTO.setRole(savedUser.getRole());

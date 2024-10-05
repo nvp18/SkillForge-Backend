@@ -17,8 +17,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("userName") String userName, @RequestParam("passWord") String password) {
-        String token = userService.login(userName,password);
+    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
+        String token = userService.login(userDTO.getUserName(),userDTO.getPassword());
         if(token!=null) {
             return ResponseEntity.status(HttpStatus.OK).body(token);
         } else {
