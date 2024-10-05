@@ -9,7 +9,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
+@CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -17,12 +20,13 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
-        String token = userService.login(userDTO.getUserName(),userDTO.getPassword());
-        if(token!=null) {
+    public ResponseEntity<Map<String,Object>> login(@RequestBody UserDTO userDTO) {
+        Map<String,Object> token = userService.login(userDTO.getUserName(),userDTO.getPassword());
+        if(!token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(token);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Not Found");
+            token.put("message","User Not Found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(token);
         }
     }
 

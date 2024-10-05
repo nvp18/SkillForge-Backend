@@ -14,6 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class UserService implements UserInterface {
 
@@ -29,13 +32,18 @@ public class UserService implements UserInterface {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Override
-    public String login(String userName, String password) {
+    public Map<String,Object> login(String userName, String password) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userName,password));
+        Map<String,Object> user = new HashMap<>();
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(userName);
+            String role = repository.findUserRole(userName);
+            String jwtToken = jwtService.generateToken(userName);
+            user.put("Role",role);
+            user.put("Token",jwtToken);
+            return user;
         } else {
-            return "False";
+            return user;
         }
     }
 
