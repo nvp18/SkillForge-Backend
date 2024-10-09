@@ -3,6 +3,7 @@ package com.skillforge.backend.service.impl;
 import com.skillforge.backend.config.JwtService;
 import com.skillforge.backend.dto.UserDTO;
 import com.skillforge.backend.entity.User;
+import com.skillforge.backend.exception.InternalServerError;
 import com.skillforge.backend.exception.UserNotAuthenticatedException;
 import com.skillforge.backend.exception.UserNotFoundException;
 import com.skillforge.backend.repository.UserRepository;
@@ -56,19 +57,23 @@ public class UserService implements UserInterface {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
-        User user = new User();
-        String randomPassword = generatePassword();
-        user.setUsername(userDTO.getUserName());
-        user.setPassword(encoder.encode(randomPassword));
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setRole(ROLES.EMPLOYEE.toString());
-        User savedUser = repository.save(user);
-        userDTO.setUserId(savedUser.getUserId());
-        userDTO.setRole(savedUser.getRole());
-        userDTO.setPassword(randomPassword);
-        return userDTO;
+        try {
+            User user = new User();
+            String randomPassword = generatePassword();
+            user.setUsername(userDTO.getUserName());
+            user.setPassword(encoder.encode(randomPassword));
+            user.setEmail(userDTO.getEmail());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setRole(ROLES.EMPLOYEE.toString());
+            User savedUser = repository.save(user);
+            userDTO.setUserId(savedUser.getUserId());
+            userDTO.setRole(savedUser.getRole());
+            userDTO.setPassword(randomPassword);
+            return userDTO;
+        } catch (Exception e) {
+            throw new InternalServerError();
+        }
     }
 
     private String generatePassword() {

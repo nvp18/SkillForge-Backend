@@ -1,6 +1,8 @@
 package com.skillforge.backend.controllers;
 
 import com.skillforge.backend.dto.ErrorDTO;
+import com.skillforge.backend.exception.InternalServerError;
+import com.skillforge.backend.exception.ResourceNotFoundException;
 import com.skillforge.backend.exception.UserNotAuthenticatedException;
 import com.skillforge.backend.exception.UserNotFoundException;
 import com.skillforge.backend.utils.ExceptionCodes;
@@ -31,4 +33,25 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDTO);
     }
+
+    @ExceptionHandler(InternalServerError.class)
+    ResponseEntity<ErrorDTO> handleInternalServerException() {
+        ErrorDTO errorDTO = ErrorDTO
+                .builder()
+                .errorCode(ExceptionCodes.INTERNAL_SERVER_ERROR.toString())
+                .errorMessage("INTERNAL SERVER ERROR")
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    ResponseEntity<ErrorDTO> handleResourceNotFoundException() {
+        ErrorDTO errorDTO = ErrorDTO
+                .builder()
+                .errorCode(ExceptionCodes.RESOURCE_NOT_FOUND.toString())
+                .errorMessage("Resource Not Found")
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDTO);
+    }
+
 }

@@ -27,12 +27,8 @@ public class UserController {
 
     @PostMapping("/createUser")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         UserDTO createUser = userService.createUser(userDTO);
-        if(createUser!=null) {
-            return ResponseEntity.status(HttpStatus.OK).body(createUser);
-        } else {
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not created");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(createUser);
     }
 }

@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("Select role from User where username=?1")
     String findUserRole(String username);
 
+    User findByUserId(String userId);
+
 }

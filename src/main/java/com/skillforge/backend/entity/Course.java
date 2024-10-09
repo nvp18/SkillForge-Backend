@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String courseId;
+    private String courseid;
 
     @Column(name = "coursename", nullable = false, unique = true)
     private String courseName;
@@ -29,13 +29,16 @@ public class Course {
     @Column(name = "coursetags", nullable = false)
     private String courseTags;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "createdat", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updatedAt", nullable = false)
+    @Column(name = "updatedat", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "coursedirectory", nullable = false, unique = true)
+    private String courseDirectory;
+
     @OneToMany(mappedBy = "course")
-    private Set<Module> modules;
+    private List<EmployeeCourses> employeeCourses = new ArrayList<>();
 
 }

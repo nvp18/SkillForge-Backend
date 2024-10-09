@@ -3,6 +3,7 @@ package com.skillforge.backend.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +16,11 @@ public class CourseDTO {
     private String courseName;
     private String courseDescription;
     private String courseTags;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
+
+    private String courseDirectory;
+
+    private List<String> courseFileDetails;
 
 }
