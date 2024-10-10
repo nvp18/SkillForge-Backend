@@ -2,7 +2,7 @@ package com.skillforge.backend.service.impl;
 
 import com.skillforge.backend.dto.EmployeeCourseDTO;
 import com.skillforge.backend.entity.EmployeeCourses;
-import com.skillforge.backend.exception.InternalServerError;
+import com.skillforge.backend.exception.InternalServerException;
 import com.skillforge.backend.exception.ResourceNotFoundException;
 import com.skillforge.backend.repository.EmployeeCourseRepository;
 import com.skillforge.backend.service.EmployeeService;
@@ -32,7 +32,7 @@ public class EmployeeServiceIMPL implements EmployeeService {
             }
             return employeeCourseDTOS;
         } catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 }

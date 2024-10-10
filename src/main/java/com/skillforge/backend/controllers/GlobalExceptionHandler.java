@@ -1,10 +1,7 @@
 package com.skillforge.backend.controllers;
 
 import com.skillforge.backend.dto.ErrorDTO;
-import com.skillforge.backend.exception.InternalServerError;
-import com.skillforge.backend.exception.ResourceNotFoundException;
-import com.skillforge.backend.exception.UserNotAuthenticatedException;
-import com.skillforge.backend.exception.UserNotFoundException;
+import com.skillforge.backend.exception.*;
 import com.skillforge.backend.utils.ExceptionCodes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +31,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDTO);
     }
 
-    @ExceptionHandler(InternalServerError.class)
+    @ExceptionHandler(InternalServerException.class)
     ResponseEntity<ErrorDTO> handleInternalServerException() {
         ErrorDTO errorDTO = ErrorDTO
                 .builder()
@@ -50,6 +47,16 @@ public class GlobalExceptionHandler {
                 .builder()
                 .errorCode(ExceptionCodes.RESOURCE_NOT_FOUND.toString())
                 .errorMessage("Resource Not Found")
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDTO);
+    }
+
+    @ExceptionHandler(GenericException.class)
+    ResponseEntity<ErrorDTO> handleGenericException() {
+        ErrorDTO errorDTO = ErrorDTO
+                .builder()
+                .errorCode(ExceptionCodes.GENERIC_EXCEPTION.toString())
+                .errorMessage("Generic Exception")
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDTO);
     }

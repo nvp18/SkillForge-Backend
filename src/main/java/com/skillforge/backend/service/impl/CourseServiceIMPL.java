@@ -7,7 +7,7 @@ import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.entity.Course;
 import com.skillforge.backend.entity.EmployeeCourses;
 import com.skillforge.backend.entity.User;
-import com.skillforge.backend.exception.InternalServerError;
+import com.skillforge.backend.exception.InternalServerException;
 import com.skillforge.backend.exception.ResourceNotFoundException;
 import com.skillforge.backend.repository.CourseRepository;
 import com.skillforge.backend.repository.EmployeeCourseRepository;
@@ -44,7 +44,7 @@ public class CourseServiceIMPL  implements CourseService {
             Course savedCourse = courseRepository.save(course);
             return  ObjectMappers.courseToCourseDTOMapper(savedCourse);
         } catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 
@@ -63,14 +63,14 @@ public class CourseServiceIMPL  implements CourseService {
         try {
             for (MultipartFile file : files) {
                 if(!s3Config.uploadFiles(courseName, file)) {
-                    throw new InternalServerError();
+                    throw new InternalServerException();
                 };
             }
             GenericDTO genericDTO = new GenericDTO();
             genericDTO.setMessage("Files uploaded successfully");
             return genericDTO;
         }catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 
@@ -80,7 +80,7 @@ public class CourseServiceIMPL  implements CourseService {
             Map<String, Object> courseContent = s3Config.getFile(courseId, fileName);
             return courseContent;
         } catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 
@@ -92,10 +92,10 @@ public class CourseServiceIMPL  implements CourseService {
                 genericDTO.setMessage("File "+fileName+" deleted successfully");
                 return genericDTO;
             } else {
-                throw new InternalServerError();
+                throw new InternalServerException();
             }
         } catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 
@@ -109,7 +109,7 @@ public class CourseServiceIMPL  implements CourseService {
             CourseDTO courseDTO = ObjectMappers.courseToCourseDTOMapper(course);
             return courseDTO;
         } catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 
@@ -133,7 +133,7 @@ public class CourseServiceIMPL  implements CourseService {
             EmployeeCourses savedCourse = employeeCourseRepository.save(employeeCourses);
             return ObjectMappers.employeecourseToEmployeecourseDTOMapper(savedCourse);
         } catch (Exception e) {
-            throw new InternalServerError();
+            throw new InternalServerException();
         }
     }
 }
