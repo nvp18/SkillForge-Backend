@@ -1,13 +1,11 @@
 package com.skillforge.backend.utils;
 
-import com.skillforge.backend.dto.CourseDTO;
-import com.skillforge.backend.dto.EmployeeCourseDTO;
-import com.skillforge.backend.dto.UserDTO;
-import com.skillforge.backend.entity.Course;
-import com.skillforge.backend.entity.EmployeeCourses;
-import com.skillforge.backend.entity.User;
+import com.skillforge.backend.dto.*;
+import com.skillforge.backend.entity.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ObjectMappers {
 
@@ -53,6 +51,31 @@ public class ObjectMappers {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .role(user.getRole())
+                .build();
+    }
+
+    public static ReplyDTO replyToReplyDTO(ConcernReply concernReply) {
+        return ReplyDTO.builder()
+                .id(concernReply.getId())
+                .reply(concernReply.getReply())
+                .repliedat(concernReply.getRepliedat().toString())
+                .repliedBy(concernReply.getRepliedBy())
+                .build();
+    }
+
+    public static ConcernDTO concernsToConcernDTO(Concerns concerns) {
+        List<ReplyDTO> replyDTOs = new ArrayList<>();
+        List<ConcernReply> concernReplies = concerns.getConcernReplies();
+        for(ConcernReply concernReply: concernReplies) {
+            replyDTOs.add(replyToReplyDTO(concernReply));
+        }
+        return ConcernDTO.builder()
+                .description(concerns.getDescription())
+                .subject(concerns.getSubject())
+                .status(concerns.getStatus())
+                .createdat(concerns.getCreatedat().toString())
+                .id(concerns.getId())
+                .concernReplies(replyDTOs)
                 .build();
     }
 }

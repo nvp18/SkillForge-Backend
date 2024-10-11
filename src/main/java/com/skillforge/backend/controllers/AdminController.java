@@ -1,42 +1,36 @@
 package com.skillforge.backend.controllers;
 
+import com.skillforge.backend.dto.ConcernDTO;
+import com.skillforge.backend.dto.GenericDTO;
+import com.skillforge.backend.dto.ReplyDTO;
+import com.skillforge.backend.service.ConcernsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    @GetMapping("/getAdmin")
-    //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> getAdmin(){
-        return ResponseEntity.ok("Admin Access");
+    @Autowired
+    ConcernsService concernsService;
+
+    @GetMapping("getAllConcerns")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<ConcernDTO>> getAllConcerns() {
+        List<ConcernDTO> concernDTOS = concernsService.getAllConcerns();
+        return ResponseEntity.ok().body(concernDTOS);
     }
 
-    @PostMapping("/createCourse")
-    public ResponseEntity createCourse() {
-        return ResponseEntity.ok("Course Created");
-    }
-
-    @DeleteMapping("/deleteCourse")
-    public ResponseEntity deleteCourse() {
-        return ResponseEntity.ok("Delete Course");
-    }
-
-    @PutMapping("/assignInstructor")
-    public ResponseEntity assignInstructorToCourse() {
-        return ResponseEntity.ok("Assigned Instructor To Course");
-    }
-
-    @PutMapping("/addStudentToCourse")
-    public ResponseEntity addStudentToCourse() {
-        return ResponseEntity.ok("Added Student To Course");
-    }
-
-    @DeleteMapping("/deleteStudentFromCourse")
-    public ResponseEntity deleteStudentFromCourse() {
-        return ResponseEntity.ok("Student deleted From Course");
+    @PostMapping("/replyToConcern/{concernId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> replyToConcern(@PathVariable("concernId") String concernId, @RequestBody ReplyDTO replyDTO, Principal connectedUser) {
+        GenericDTO genericDTO = concernsService.replyToConcern(replyDTO,concernId,connectedUser);
+        return ResponseEntity.ok().body(genericDTO);
     }
 
 
