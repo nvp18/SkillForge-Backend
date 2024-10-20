@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<EmployeeCourses> employeeCourses = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<UserToken> tokens;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(this.getRole()));

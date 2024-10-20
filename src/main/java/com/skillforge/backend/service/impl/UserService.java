@@ -5,7 +5,9 @@ import com.skillforge.backend.dto.ChangePasswordDTO;
 import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.UserDTO;
 import com.skillforge.backend.entity.User;
+import com.skillforge.backend.entity.UserToken;
 import com.skillforge.backend.exception.*;
+import com.skillforge.backend.repository.TokenRepository;
 import com.skillforge.backend.repository.UserRepository;
 import com.skillforge.backend.service.UserInterface;
 import com.skillforge.backend.utils.ObjectMappers;
@@ -21,19 +23,23 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class UserService implements UserInterface {
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
     @Autowired
-    JwtService jwtService;
+    private JwtService jwtService;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -45,7 +51,16 @@ public class UserService implements UserInterface {
             if (authentication.isAuthenticated()) {
                 Map<String,Object> user = new HashMap<>();
                 String role = repository.findUserRole(userName);
+                User loggedUser = repository.findByUsername(userName);
                 String jwtToken = jwtService.generateToken(userName);
+                UserToken token = UserToken.builder()
+                        .token(jwtToken)
+                        .expired(false)
+                        .revoked(false)
+                        .user(loggedUser)
+                        .build();
+                revokeAllUserTokens(loggedUser);
+                tokenRepository.save(token);
                 user.put("Role", role);
                 user.put("Token", jwtToken);
                 return user;
@@ -134,5 +149,21 @@ public class UserService implements UserInterface {
         String characters = "abcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_.";
         String password = RandomStringUtils.random( 15, characters );
         return password;
+    }
+
+    private void revokeAllUserTokens(User user) {
+        try {
+            List<UserToken> userTokens = tokenRepository.findAllValidTokens(user.getUserId());
+            if(userTokens.isEmpty()) {
+                return;
+            }
+            userTokens.forEach((token) -> {
+                token.setRevoked(true);
+                token.setExpired(true);
+            });
+            tokenRepository.saveAll(userTokens);
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
     }
 }
