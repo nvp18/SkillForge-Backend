@@ -1,9 +1,7 @@
 package com.skillforge.backend.controllers;
 
-import com.skillforge.backend.dto.ConcernDTO;
-import com.skillforge.backend.dto.EmployeeCourseDTO;
-import com.skillforge.backend.dto.GenericDTO;
-import com.skillforge.backend.dto.ReplyDTO;
+import com.skillforge.backend.dto.*;
+import com.skillforge.backend.service.AnnouncementService;
 import com.skillforge.backend.service.ConcernsService;
 import com.skillforge.backend.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,10 +18,13 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    EmployeeService employeeService;
+    private EmployeeService employeeService;
 
     @Autowired
-    ConcernsService concernsService;
+    private ConcernsService concernsService;
+
+    @Autowired
+    private AnnouncementService announcementService;
 
     @GetMapping("/getAllEmployeeCourses/{employeeId}")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -51,6 +52,13 @@ public class EmployeeController {
     public ResponseEntity<GenericDTO> replyToConcern(@PathVariable("concernId") String concernId, @RequestBody ReplyDTO replyDTO, Principal connectedUser) {
         GenericDTO genericDTO = concernsService.replyToConcern(replyDTO,concernId,connectedUser);
         return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @GetMapping("/getAnnouncements/{courseId}")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public ResponseEntity<List<AnnouncementDTO>> getCourseAnnouncements(@PathVariable("courseId") String courseId) {
+        List<AnnouncementDTO> announcementDTOS = announcementService.getCourseAnnouncements(courseId);
+        return ResponseEntity.ok().body(announcementDTOS);
     }
 
 

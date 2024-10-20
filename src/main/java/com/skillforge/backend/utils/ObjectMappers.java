@@ -78,4 +78,24 @@ public class ObjectMappers {
                 .concernReplies(replyDTOs)
                 .build();
     }
+
+    public static AnnouncementDTO announcementToDTO(Announcement announcement) {
+        return AnnouncementDTO.builder()
+                .id(announcement.getId())
+                .title(announcement.getTitle())
+                .createdby(announcement.getCreatedby())
+                .description(announcement.getDescription())
+                .createdat(announcement.getCreatedat().toString())
+                .updatedat(announcement.getUpdatedat().toString())
+                .build();
+    }
+
+    public static Announcement announcementDTOToAnnouncement(AnnouncementDTO announcementDTO) {
+        return Announcement.builder()
+                .title(announcementDTO.getTitle())
+                .description(announcementDTO.getDescription())
+                .createdat(LocalDateTime.now())
+                .updatedat(LocalDateTime.now())
+                .build();
+    }
 }

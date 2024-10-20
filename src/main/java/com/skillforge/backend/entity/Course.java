@@ -18,6 +18,7 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "courseid")
     private String courseid;
 
     @Column(name = "coursename", nullable = false, unique = true)
