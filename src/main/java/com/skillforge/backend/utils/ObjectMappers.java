@@ -2,6 +2,7 @@ package com.skillforge.backend.utils;
 
 import com.skillforge.backend.dto.*;
 import com.skillforge.backend.entity.*;
+import com.skillforge.backend.entity.Module;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -96,6 +97,14 @@ public class ObjectMappers {
                 .description(announcementDTO.getDescription())
                 .createdat(LocalDateTime.now())
                 .updatedat(LocalDateTime.now())
+                .build();
+    }
+
+    public static ModuleDTO moduleToModuleDTO(Module module) {
+        return ModuleDTO.builder()
+                .moduleId(module.getModuleid())
+                .moduleName(module.getModuleName())
+                .moduleNumber(module.getModulenumber())
                 .build();
     }
 }

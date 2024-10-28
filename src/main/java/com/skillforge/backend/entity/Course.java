@@ -40,6 +40,9 @@ public class Course {
     private String courseDirectory;
 
     @OneToMany(mappedBy = "course")
+    private List<Module> courseModules;
+
+    @OneToMany(mappedBy = "course")
     private List<EmployeeCourses> employeeCourses = new ArrayList<>();
 
 }

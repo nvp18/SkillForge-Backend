@@ -17,19 +17,23 @@ import java.time.LocalDateTime;
 public class Module {
 
     @Id
-    private String moduleId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String moduleid;
 
     @Column(name = "modulename", nullable = false)
     private String moduleName;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "createdat", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updatedAt", nullable = false)
+    @Column(name = "updatedat", nullable = false)
     private LocalDateTime updatedAt;
 
     @Column(name = "modulecontent", nullable = false)
     private String modulecontent;
+
+    @Column(name = "modulenumber", nullable = false)
+    private Integer modulenumber;
 
     @ManyToOne
     @JoinColumn(name = "courseid")

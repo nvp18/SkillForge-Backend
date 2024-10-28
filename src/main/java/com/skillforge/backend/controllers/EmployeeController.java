@@ -4,7 +4,6 @@ import com.skillforge.backend.dto.*;
 import com.skillforge.backend.service.AnnouncementService;
 import com.skillforge.backend.service.ConcernsService;
 import com.skillforge.backend.service.EmployeeService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +26,7 @@ public class EmployeeController {
     private AnnouncementService announcementService;
 
     @GetMapping("/getAllEmployeeCourses/{employeeId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<List<EmployeeCourseDTO>> getAllEmployeeCourses(@PathVariable("employeeId") String employeeId) {
         List<EmployeeCourseDTO> employeeCourseDTOs = employeeService.getAllCourses(employeeId);
         return ResponseEntity.ok().body(employeeCourseDTOs);

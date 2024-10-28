@@ -13,9 +13,7 @@ public class ModuleDTO {
 
     private String moduleId;
     private String moduleName;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private String moduleContent;
-    private String course;
+
+    private int moduleNumber;
 
 }
