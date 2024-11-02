@@ -17,4 +17,6 @@ public interface AnnouncementService {
 
     GenericDTO editAnnouncement(String announcementId, AnnouncementDTO announcementDTO, Principal connectedUser);
 
+    AnnouncementDTO getAnnouncement(String announcementId);
+
 }

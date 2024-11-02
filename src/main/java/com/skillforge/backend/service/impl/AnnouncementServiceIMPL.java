@@ -112,4 +112,19 @@ public class AnnouncementServiceIMPL implements AnnouncementService {
         }
     }
 
+    @Override
+    public AnnouncementDTO getAnnouncement(String announcementId) {
+        try {
+            Announcement announcement = announcementRepository.findById(announcementId);
+            if(announcement==null) {
+                throw new ResourceNotFoundException();
+            }
+            return ObjectMappers.announcementToDTO(announcement);
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
+
 }

@@ -4,6 +4,7 @@ import com.skillforge.backend.dto.*;
 import com.skillforge.backend.service.AnnouncementService;
 import com.skillforge.backend.service.ConcernsService;
 import com.skillforge.backend.service.EmployeeService;
+//import com.skillforge.backend.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,9 @@ public class EmployeeController {
 
     @Autowired
     private AnnouncementService announcementService;
+
+    //@Autowired
+    //private QuizService quizService;
 
     @GetMapping("/getAllEmployeeCourses/{employeeId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
@@ -53,12 +57,33 @@ public class EmployeeController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
-    @GetMapping("/getAnnouncements/{courseId}")
+    @GetMapping("/getAllAnnouncements/{courseId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<List<AnnouncementDTO>> getCourseAnnouncements(@PathVariable("courseId") String courseId) {
         List<AnnouncementDTO> announcementDTOS = announcementService.getCourseAnnouncements(courseId);
         return ResponseEntity.ok().body(announcementDTOS);
     }
+
+    /*@GetMapping("/getAnnouncement/{announcementId}")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public ResponseEntity<AnnouncementDTO> getAnnouncement(@PathVariable("announcementId") String announcementId) {
+        AnnouncementDTO announcementDTO = announcementService.getAnnouncement(announcementId);
+        return ResponseEntity.ok().body(announcementDTO);
+    }
+
+    @PostMapping("/updateModuleCompleted/{courseId}")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public ResponseEntity<GenericDTO> updateCompletedModule(@PathVariable("courseId") String courseId, Principal connectedUser) {
+        GenericDTO genericDTO = employeeService.updateCompletedModules(courseId,connectedUser);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @GetMapping("/getQuiz/{courseId}")
+    @PreAuthorize("hasAutority('EMPLOYEE')")
+    public ResponseEntity<List<QuizDTO>> detCourseQuiz(@PathVariable("courseId") String courseId) {
+        List<QuizDTO> quizDTOS = quizService.getCourseQuiz(courseId);
+        return ResponseEntity.ok().body(quizDTOS);
+    }*/
 
 
 }

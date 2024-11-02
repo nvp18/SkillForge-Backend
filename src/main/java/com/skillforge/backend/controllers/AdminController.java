@@ -45,7 +45,7 @@ public class AdminController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
-    @GetMapping("/getAnnouncements/{courseId}")
+    @GetMapping("/getAllAnnouncements/{courseId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<AnnouncementDTO>> getCourseAnnouncements(@PathVariable("courseId") String courseId) {
         List<AnnouncementDTO> announcementDTOS = announcementService.getCourseAnnouncements(courseId);
@@ -66,4 +66,10 @@ public class AdminController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
+    @GetMapping("/getAnnouncement/{announcementId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<AnnouncementDTO> getAnnouncement(@PathVariable("announcementId") String announcementId) {
+        AnnouncementDTO announcementDTO = announcementService.getAnnouncement(announcementId);
+        return ResponseEntity.ok().body(announcementDTO);
+    }
 }
