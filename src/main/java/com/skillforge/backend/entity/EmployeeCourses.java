@@ -27,6 +27,9 @@ public class EmployeeCourses {
     @Column(name = "status",nullable = false)
     private String status;
 
+    @Column(name = "modulescompleted", nullable = false)
+    private Integer modulesCompleted;
+
     @ManyToOne
     @JoinColumn(name = "employeeid", nullable = false)
     private User user;

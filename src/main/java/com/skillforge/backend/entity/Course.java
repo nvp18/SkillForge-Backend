@@ -36,13 +36,25 @@ public class Course {
     @Column(name = "updatedat", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "daystofinish", nullable = false)
+    private Integer days;
+
     @Column(name = "coursedirectory", nullable = false, unique = true)
     private String courseDirectory;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Module> courseModules;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private List<Announcement> announcements;
+
+    /*@OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private List<Discussions> discussions;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    private List<Quiz> quizList;*/
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<EmployeeCourses> employeeCourses = new ArrayList<>();
 
 }
