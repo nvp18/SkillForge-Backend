@@ -18,8 +18,9 @@ public class CourseDTO {
     private String createdAt;
     private String updatedAt;
 
+    private Integer daysToFinish;
+
     private String courseDirectory;
 
-    private List<String> courseModules;
 
 }

@@ -17,6 +17,7 @@ public class ObjectMappers {
         course.setCreatedAt(LocalDateTime.now());
         course.setUpdatedAt(LocalDateTime.now());
         course.setCourseDirectory(courseDTO.getCourseName());
+        course.setDays(courseDTO.getDaysToFinish());
         course.setCourseDescription(courseDTO.getCourseDescription());
         return course;
     }
@@ -30,6 +31,7 @@ public class ObjectMappers {
         courseDTO.setUpdatedAt(course.getUpdatedAt().toString());
         courseDTO.setCourseDirectory(course.getCourseName());
         courseDTO.setCourseDescription(course.getCourseDescription());
+        courseDTO.setDaysToFinish(course.getDays());
         return courseDTO;
     }
 
@@ -41,6 +43,7 @@ public class ObjectMappers {
         employeeCourseDTO.setDueDate(course.getDueDate().toString());
         employeeCourseDTO.setAssignedAt(course.getAssignedAt().toString());
         employeeCourseDTO.setUser(userToUserDTO(course.getUser()));
+        employeeCourseDTO.setModuleCompleted(course.getModulesCompleted());
         return employeeCourseDTO;
     }
 
@@ -107,4 +110,64 @@ public class ObjectMappers {
                 .moduleNumber(module.getModulenumber())
                 .build();
     }
+
+    /*public static Quiz quizDTOtoQuiz(QuizDTO quizDTO) {
+        return Quiz.builder()
+                .question(quizDTO.getQuestion())
+                .option1(quizDTO.getOption1())
+                .option2(quizDTO.getOption2())
+                .option3(quizDTO.getOption3())
+                .option4(quizDTO.getOption4())
+                .correctans(quizDTO.getCorrectans())
+                .build();
+    }
+
+    public static QuizDTO quiztoQuizDTO(Quiz quiz) {
+        return QuizDTO.builder()
+                .question(quiz.getQuestion())
+                .option1(quiz.getOption1())
+                .option2(quiz.getOption2())
+                .option3(quiz.getOption3())
+                .option4(quiz.getOption4())
+                .correctans(quiz.getCorrectans())
+                .build();
+    }
+
+    public static Discussions discussionDTOtodiscussion(DiscussionDTO discussionDTO) {
+        return Discussions.builder()
+                .title(discussionDTO.getTitle())
+                .description(discussionDTO.getDescription())
+                .build();
+    }
+
+    public static DiscussionDTO discussiontoDiscussionDTO(Discussions discussions) {
+        List<DiscussionReply> discussionReplyList = discussions.getDiscussionReplyList();
+        List<DiscussionReplyDTO> discussionReplyDTOS = new ArrayList<>();
+        for(DiscussionReply discussionReply: discussionReplyList) {
+            discussionReplyDTOS.add(ObjectMappers.discussionReplytoDiscussionReplyDTO(discussionReply));
+        }
+        return DiscussionDTO.builder()
+                .title(discussions.getTitle())
+                .description(discussions.getDescription())
+                .createdby(discussions.getCreatedby())
+                .createdat(discussions.getCreatedat().toString())
+                .discussionReplyList(discussionReplyDTOS)
+                .id(discussions.getId())
+                .build();
+    }
+
+    public static DiscussionReply discussionReplyDTOtoDiscussionReply(DiscussionReplyDTO discussionReplyDTO) {
+        return DiscussionReply.builder()
+                .reply(discussionReplyDTO.getReply())
+                .build();
+    }
+
+    public static DiscussionReplyDTO discussionReplytoDiscussionReplyDTO(DiscussionReply discussionReply) {
+        return DiscussionReplyDTO.builder()
+                .reply(discussionReply.getReply())
+                .repliedBy(discussionReply.getRepliedBy())
+                .repliedat(discussionReply.getRepliedat().toString())
+                .id(discussionReply.getId())
+                .build();
+    }*/
 }

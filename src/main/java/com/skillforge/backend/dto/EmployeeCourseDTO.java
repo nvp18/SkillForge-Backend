@@ -16,6 +16,7 @@ public class EmployeeCourseDTO {
     private String assignedAt;
     private String dueDate;
     private String status;
+    private Integer moduleCompleted;
     private UserDTO user;
     private CourseDTO course;
 
