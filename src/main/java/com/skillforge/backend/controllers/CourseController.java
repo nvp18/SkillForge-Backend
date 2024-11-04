@@ -2,8 +2,8 @@ package com.skillforge.backend.controllers;
 
 import com.skillforge.backend.dto.*;
 import com.skillforge.backend.service.CourseService;
-import com.skillforge.backend.service.DiscussionService;
-import com.skillforge.backend.service.QuizService;
+//import com.skillforge.backend.service.DiscussionService;
+//import com.skillforge.backend.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -25,11 +25,11 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @Autowired
+    /*@Autowired
     private QuizService quizService;
 
     @Autowired
-    private DiscussionService discussionService;
+    private DiscussionService discussionService;*/
 
     @PostMapping("/createCourse")
     @PreAuthorize("hasAuthority('ADMIN')")
