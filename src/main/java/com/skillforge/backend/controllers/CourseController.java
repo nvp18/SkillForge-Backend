@@ -1,13 +1,11 @@
 package com.skillforge.backend.controllers;
 
-import com.skillforge.backend.dto.CourseDTO;
-import com.skillforge.backend.dto.EmployeeCourseDTO;
-import com.skillforge.backend.dto.GenericDTO;
-import com.skillforge.backend.dto.ModuleDTO;
+import com.skillforge.backend.dto.*;
 import com.skillforge.backend.service.CourseService;
+import com.skillforge.backend.service.DiscussionService;
+import com.skillforge.backend.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +25,31 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private QuizService quizService;
+
+    @Autowired
+    private DiscussionService discussionService;
+
     @PostMapping("/createCourse")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CourseDTO> createCourse(@RequestBody CourseDTO courseDTO){
         CourseDTO savedCourse = courseService.createCourse(courseDTO);
         return ResponseEntity.ok().body(savedCourse);
+    }
+
+    @PutMapping("/updateCourse/{courseId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> updateCourseDetails(@RequestBody CourseDTO courseDTO,@PathVariable("courseId") String courseId) {
+        GenericDTO genericDTO = courseService.updateCourse(courseDTO,courseId);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @DeleteMapping("/deleteCourse/{courseId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> deleteCourse(@PathVariable("courseId") String courseId) {
+        GenericDTO genericDTO = courseService.deleteCourse(courseId);
+        return ResponseEntity.ok().body(genericDTO);
     }
 
     @GetMapping("/getAllCourses")
@@ -88,12 +106,69 @@ public class CourseController {
         return ResponseEntity.ok().body(courseDTO);
     }
 
-    @PostMapping("/assignCourseToEmployee/{courseId}/{employeeId}/{dateTime}")
+    /*@PostMapping("/assignCourseToEmployee/{courseId}/{employeeId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<EmployeeCourseDTO> assignCourseToEmployee(@PathVariable("courseId") String courseId,
-                                                                    @PathVariable("employeeId") String employeeId,
-                                                                    @PathVariable("dateTime") @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm") LocalDateTime dateTime) {
-        EmployeeCourseDTO employeeCourseDTO = courseService.assignCourseToEmployee(courseId,employeeId,dateTime);
+    public ResponseEntity<EmployeeCourseDTO> assignCourseToEmployee(@PathVariable("courseId") String courseId, @PathVariable("employeeId") String employeeId) {
+        EmployeeCourseDTO employeeCourseDTO = courseService.assignCourseToEmployee(courseId,employeeId);
         return ResponseEntity.ok().body(employeeCourseDTO);
     }
+
+    @DeleteMapping("/deassignCourseToEmployee/{courseId}/{employeeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> deassignCourseToEmployee(@PathVariable("courseId") String courseId, @PathVariable("employeeId") String employeeId) {
+        GenericDTO genericDTO = courseService.deassignCourseToEmployee(courseId,employeeId);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @PostMapping("/createQuiz/{courseId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> createQuiz(@PathVariable("courseId") String courseId, @RequestBody List<QuizDTO> quizDTOs) {
+        GenericDTO genericDTO = quizService.createQuiz(courseId,quizDTOs);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @DeleteMapping("/deleteQuestion/{questionId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> deleteQuiz(@PathVariable("questionId") String questionId) {
+        GenericDTO genericDTO = quizService.deleteQuestion(questionId);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @GetMapping("/getQuiz/{courseId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<QuizDTO>> detCourseQuiz(@PathVariable("courseId") String courseId) {
+        List<QuizDTO> quizDTOS = quizService.getCourseQuiz(courseId);
+        return ResponseEntity.ok().body(quizDTOS);
+    }
+
+    @PostMapping("/postDiscussion/{courseId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
+    public ResponseEntity<GenericDTO> postDiscussion(@PathVariable("courseId") String courseId, @RequestBody DiscussionDTO discussionDTO,
+                                                     Principal connectedUser) {
+        GenericDTO genericDTO = discussionService.postDiscussion(courseId,discussionDTO,connectedUser);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @PostMapping("/replyToDiscussion/{discussionId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
+    public ResponseEntity<GenericDTO> replyToDiscussion(@PathVariable("discussionId") String discussionId,@RequestBody DiscussionReplyDTO discussionReplyDTO,
+                                                        Principal connectedUser) {
+        GenericDTO genericDTO = discussionService.replyToDiscussion(discussionReplyDTO,discussionId,connectedUser);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @GetMapping("/getAllDiscussions/{courseId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
+    public ResponseEntity<List<DiscussionDTO>> getAllDiscussions(@PathVariable("courseId") String courseId) {
+        List<DiscussionDTO> discussionDTOS = discussionService.getCourseDiscussions(courseId);
+        return ResponseEntity.ok().body(discussionDTOS);
+    }
+
+    @DeleteMapping("/deleteDiscussion/{discussionId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> deleteDiscussion(@PathVariable("discussionId") String discussionId) {
+        GenericDTO genericDTO = discussionService.deleteDiscussion(discussionId);
+        return ResponseEntity.ok().body(genericDTO);
+    }*/
+
 }

@@ -17,8 +17,8 @@ public interface CourseService {
 
     List<CourseDTO> getAllCourses();
 
-    CourseDTO updateCourse(CourseDTO courseDTO);
-    CourseDTO deleteCourse(CourseDTO courseDTO);
+    GenericDTO updateCourse(CourseDTO courseDTO,String courseId);
+    GenericDTO deleteCourse(String courseId);
 
     GenericDTO uploadCourseModules(String courseId, MultipartFile file, String moduleName, int modulenumber);
 
@@ -32,5 +32,7 @@ public interface CourseService {
 
     CourseDTO getCourseDetails(String courseId);
 
-    EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID, LocalDateTime dueDate);
+    /*EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID);
+
+    GenericDTO deassignCourseToEmployee(String courseId, String employeeId);*/
 }

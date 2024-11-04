@@ -18,6 +18,7 @@ import com.skillforge.backend.repository.UserRepository;
 import com.skillforge.backend.service.CourseService;
 import com.skillforge.backend.utils.CourseStatus;
 import com.skillforge.backend.utils.ObjectMappers;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -76,13 +77,48 @@ public class CourseServiceIMPL  implements CourseService {
     }
 
     @Override
-    public CourseDTO updateCourse(CourseDTO courseDTO) {
-        return null;
+    public GenericDTO updateCourse(CourseDTO courseDTO,String courseId) {
+        try {
+            Course course = courseRepository.findByCourseid(courseId);
+            if(course == null) {
+                throw new ResourceNotFoundException();
+            }
+            course.setCourseDescription(courseDTO.getCourseDescription());
+            course.setCourseTags(courseDTO.getCourseTags());
+            course.setDays(courseDTO.getDaysToFinish());
+            courseRepository.save(course);
+            return GenericDTO.builder()
+                    .message("Updated Course Successfully").build();
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
     }
 
     @Override
-    public CourseDTO deleteCourse(CourseDTO courseDTO) {
-        return null;
+    @Transactional
+    public GenericDTO deleteCourse(String courseId) {
+        try {
+            Course course = courseRepository.findByCourseid(courseId);
+            if(course==null) {
+                throw new ResourceNotFoundException();
+            }
+            String courseDirectory = course.getCourseDirectory();
+            if(s3Config.deleteCourseModules(courseDirectory)) {
+                courseRepository.delete(course);
+                GenericDTO genericDTO = GenericDTO.builder()
+                        .message("Delete Course Successfully")
+                        .build();
+                return genericDTO;
+            } else {
+                throw new InternalServerException();
+            }
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
     }
 
     @Override
@@ -157,9 +193,9 @@ public class CourseServiceIMPL  implements CourseService {
             }
             String key = module.getModulecontent();
             if(s3Config.deleteFile(key)) {
+                moduleRepository.delete(module);
                 GenericDTO genericDTO = new GenericDTO();
                 genericDTO.setMessage("Module deleted successfully");
-                moduleRepository.delete(module);
                 return genericDTO;
             } else {
                 throw new InternalServerException();
@@ -213,8 +249,8 @@ public class CourseServiceIMPL  implements CourseService {
         }
     }
 
-    @Override
-    public EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID, LocalDateTime dueDate) {
+    /*@Override
+    public EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID) {
         try {
             User user = userRepository.findByUserId(employeeID);
             if(user == null) {
@@ -229,11 +265,24 @@ public class CourseServiceIMPL  implements CourseService {
             employeeCourses.setUser(user);
             employeeCourses.setAssignedAt(LocalDateTime.now());
             employeeCourses.setStatus(CourseStatus.NOT_STARTED.toString());
-            employeeCourses.setDueDate(dueDate);
+            employeeCourses.setDueDate(LocalDateTime.now().plusDays(course.getDays()));
+            employeeCourses.setModulesCompleted(0);
             EmployeeCourses savedCourse = employeeCourseRepository.save(employeeCourses);
             return ObjectMappers.employeecourseToEmployeecourseDTOMapper(savedCourse);
         } catch (Exception e) {
             throw new InternalServerException();
         }
     }
+
+    @Override
+    public GenericDTO deassignCourseToEmployee(String courseId, String employeeId) {
+        try {
+            employeeCourseRepository.deleteByEmployeeIdAndCourseId(employeeId,courseId);
+            return GenericDTO.builder()
+                    .message("Course Deassigned Succesfully")
+                    .build();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }*/
 }
