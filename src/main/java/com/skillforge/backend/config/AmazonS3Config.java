@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -63,6 +65,26 @@ public class AmazonS3Config {
 
     public boolean deleteFile(String key) {
         amazonS3Client.deleteObject(bucketName,key);
+        return true;
+    }
+
+    public boolean deleteCourseModules(String courseDirectory) {
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest().withBucketName(bucketName)
+                .withPrefix(courseDirectory)
+                .withMaxKeys(4);
+        ObjectListing objectListing;
+        do {
+            objectListing = amazonS3Client.listObjects(listObjectsRequest);
+            List<DeleteObjectsRequest.KeyVersion> keys = new ArrayList<>();
+            for(S3ObjectSummary summary: objectListing.getObjectSummaries()) {
+                keys.add(new DeleteObjectsRequest.KeyVersion(summary.getKey()));
+            }
+            if(!keys.isEmpty()) {
+                DeleteObjectsRequest deleteRequest = new DeleteObjectsRequest(bucketName).withKeys(keys);
+                amazonS3Client.deleteObjects(deleteRequest);
+            }
+            listObjectsRequest.setMarker(objectListing.getNextMarker());
+        } while (objectListing.isTruncated());
         return true;
     }
 
