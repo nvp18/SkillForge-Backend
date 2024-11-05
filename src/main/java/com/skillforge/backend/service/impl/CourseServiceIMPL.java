@@ -249,7 +249,7 @@ public class CourseServiceIMPL  implements CourseService {
         }
     }
 
-    /*@Override
+    @Override
     public EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID) {
         try {
             User user = userRepository.findByUserId(employeeID);
@@ -275,6 +275,7 @@ public class CourseServiceIMPL  implements CourseService {
     }
 
     @Override
+    @Transactional
     public GenericDTO deassignCourseToEmployee(String courseId, String employeeId) {
         try {
             employeeCourseRepository.deleteByEmployeeIdAndCourseId(employeeId,courseId);
@@ -284,5 +285,5 @@ public class CourseServiceIMPL  implements CourseService {
         } catch (Exception e) {
             throw new InternalServerException();
         }
-    }*/
+    }
 }

@@ -60,7 +60,7 @@ public class ConcernsServiceIMPL implements ConcernsService {
             concerns.setUser(user);
             concerns.setDescription(concernDTO.getDescription());
             concerns.setCreatedat(LocalDateTime.now());
-            concerns.setStatus(ConcernStatus.READ.name());
+            concerns.setStatus(ConcernStatus.NOT_READ.name());
             concerns.setSubject(concernDTO.getSubject());
             concernRepository.save(concerns);
             return GenericDTO.builder()
@@ -80,6 +80,9 @@ public class ConcernsServiceIMPL implements ConcernsService {
                 throw new ResourceNotFoundException();
             }
             ConcernReply concernReply = new ConcernReply();
+            Concerns validConcern = concern.get();
+            validConcern.setStatus(ConcernStatus.READ.name());
+            concernRepository.save(validConcern);
             concernReply.setConcerns(concern.get());
             concernReply.setReply(replyDTO.getReply());
             concernReply.setRepliedat(LocalDateTime.now());

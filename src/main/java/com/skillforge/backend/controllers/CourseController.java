@@ -2,8 +2,8 @@ package com.skillforge.backend.controllers;
 
 import com.skillforge.backend.dto.*;
 import com.skillforge.backend.service.CourseService;
-//import com.skillforge.backend.service.DiscussionService;
-//import com.skillforge.backend.service.QuizService;
+import com.skillforge.backend.service.DiscussionService;
+import com.skillforge.backend.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -25,11 +25,11 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    /*@Autowired
+    @Autowired
     private QuizService quizService;
 
     @Autowired
-    private DiscussionService discussionService;*/
+    private DiscussionService discussionService;
 
     @PostMapping("/createCourse")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -106,7 +106,7 @@ public class CourseController {
         return ResponseEntity.ok().body(courseDTO);
     }
 
-    /*@PostMapping("/assignCourseToEmployee/{courseId}/{employeeId}")
+    @PostMapping("/assignCourseToEmployee/{courseId}/{employeeId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<EmployeeCourseDTO> assignCourseToEmployee(@PathVariable("courseId") String courseId, @PathVariable("employeeId") String employeeId) {
         EmployeeCourseDTO employeeCourseDTO = courseService.assignCourseToEmployee(courseId,employeeId);
@@ -159,16 +159,15 @@ public class CourseController {
 
     @GetMapping("/getAllDiscussions/{courseId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
-    public ResponseEntity<List<DiscussionDTO>> getAllDiscussions(@PathVariable("courseId") String courseId) {
-        List<DiscussionDTO> discussionDTOS = discussionService.getCourseDiscussions(courseId);
+    public ResponseEntity<List<DiscussionDTO>> getAllDiscussions(@PathVariable("courseId") String courseId, Principal connectedUser) {
+        List<DiscussionDTO> discussionDTOS = discussionService.getCourseDiscussions(courseId,connectedUser);
         return ResponseEntity.ok().body(discussionDTOS);
     }
 
     @DeleteMapping("/deleteDiscussion/{discussionId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<GenericDTO> deleteDiscussion(@PathVariable("discussionId") String discussionId) {
         GenericDTO genericDTO = discussionService.deleteDiscussion(discussionId);
         return ResponseEntity.ok().body(genericDTO);
-    }*/
-
+    }
 }

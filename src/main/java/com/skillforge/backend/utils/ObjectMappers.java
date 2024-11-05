@@ -42,7 +42,6 @@ public class ObjectMappers {
         employeeCourseDTO.setStatus(course.getStatus());
         employeeCourseDTO.setDueDate(course.getDueDate().toString());
         employeeCourseDTO.setAssignedAt(course.getAssignedAt().toString());
-        employeeCourseDTO.setUser(userToUserDTO(course.getUser()));
         employeeCourseDTO.setModuleCompleted(course.getModulesCompleted());
         return employeeCourseDTO;
     }
@@ -111,7 +110,7 @@ public class ObjectMappers {
                 .build();
     }
 
-    /*public static Quiz quizDTOtoQuiz(QuizDTO quizDTO) {
+    public static Quiz quizDTOtoQuiz(QuizDTO quizDTO) {
         return Quiz.builder()
                 .question(quizDTO.getQuestion())
                 .option1(quizDTO.getOption1())
@@ -124,6 +123,7 @@ public class ObjectMappers {
 
     public static QuizDTO quiztoQuizDTO(Quiz quiz) {
         return QuizDTO.builder()
+                .id(quiz.getId())
                 .question(quiz.getQuestion())
                 .option1(quiz.getOption1())
                 .option2(quiz.getOption2())
@@ -169,5 +169,5 @@ public class ObjectMappers {
                 .repliedat(discussionReply.getRepliedat().toString())
                 .id(discussionReply.getId())
                 .build();
-    }*/
+    }
 }

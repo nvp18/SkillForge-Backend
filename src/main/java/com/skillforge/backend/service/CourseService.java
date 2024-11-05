@@ -4,10 +4,8 @@ import com.skillforge.backend.dto.CourseDTO;
 import com.skillforge.backend.dto.EmployeeCourseDTO;
 import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.ModuleDTO;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,7 @@ public interface CourseService {
 
     CourseDTO getCourseDetails(String courseId);
 
-    /*EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID);
+    EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID);
 
-    GenericDTO deassignCourseToEmployee(String courseId, String employeeId);*/
+    GenericDTO deassignCourseToEmployee(String courseId, String employeeId);
 }
