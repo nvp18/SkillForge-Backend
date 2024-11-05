@@ -1,5 +1,6 @@
 package com.skillforge.backend.service.impl;
 
+import com.skillforge.backend.config.EmailConfig;
 import com.skillforge.backend.config.JwtService;
 import com.skillforge.backend.dto.ChangePasswordDTO;
 import com.skillforge.backend.dto.GenericDTO;
@@ -40,6 +41,9 @@ public class UserService implements UserInterface {
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+            private EmailConfig emailConfig;
 
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -86,10 +90,10 @@ public class UserService implements UserInterface {
             User savedUser = repository.save(user);
             userDTO.setUserId(savedUser.getUserId());
             userDTO.setRole(savedUser.getRole());
-            userDTO.setPassword(randomPassword);
+            emailConfig.sendEmail(user.getEmail(), randomPassword, user.getUsername());
             return userDTO;
         } catch (Exception e) {
-            throw new InternalServerException();
+            throw new InternalServerException(e.getMessage());
         }
     }
 
