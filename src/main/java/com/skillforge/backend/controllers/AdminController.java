@@ -1,9 +1,6 @@
 package com.skillforge.backend.controllers;
 
-import com.skillforge.backend.dto.AnnouncementDTO;
-import com.skillforge.backend.dto.ConcernDTO;
-import com.skillforge.backend.dto.GenericDTO;
-import com.skillforge.backend.dto.ReplyDTO;
+import com.skillforge.backend.dto.*;
 import com.skillforge.backend.service.AnnouncementService;
 import com.skillforge.backend.service.ConcernsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/admin")
 public class AdminController {
 

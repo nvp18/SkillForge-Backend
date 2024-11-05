@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/employee")
 public class EmployeeController {
 
@@ -90,5 +91,11 @@ public class EmployeeController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
+    /*@PostMapping("/startCourse/{courseId}")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public ResponseEntity<GenericDTO> changeCourseStatus(@PathVariable("courseId") String courseId, Principal connectedUser) {
+        GenericDTO genericDTO = employeeService.startCourse(courseId,connectedUser);
+        return ResponseEntity.ok().body(genericDTO);
+    }*/
 
 }
