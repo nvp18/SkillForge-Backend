@@ -35,6 +35,7 @@ public class SkillForgeApplication {
 		System.setProperty("DATABASE_USERNAME",dotenv.get("DATABASE_USERNAME"));
 		System.setProperty("DATABASE_PASSWORD",dotenv.get("DATABASE_PASSWORD"));
 		System.setProperty("DATABASE_NAME",dotenv.get("DATABASE_NAME"));
+		System.setProperty("DATABASE_URL",dotenv.get("DATABASE_URL"));
 	}
 
 }
