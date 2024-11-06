@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,8 +28,8 @@ public class EmployeeCourses {
     @Column(name = "status",nullable = false)
     private String status;
 
-    @Column(name = "modulescompleted", nullable = false)
-    private Integer modulesCompleted;
+    @Column(name = "quizcompleted", nullable = false)
+    private Boolean quizcompleted;
 
     @ManyToOne
     @JoinColumn(name = "employeeid", nullable = false)
@@ -38,4 +39,6 @@ public class EmployeeCourses {
     @JoinColumn(name = "courseid", nullable = false)
     private Course course;
 
+    @OneToMany(mappedBy = "employeeCourses",cascade =  CascadeType.REMOVE)
+    private List<EmployeeCourseProgress> employeeCourseProgressList;
 }

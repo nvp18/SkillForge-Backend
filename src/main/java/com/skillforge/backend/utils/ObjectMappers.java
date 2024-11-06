@@ -42,7 +42,7 @@ public class ObjectMappers {
         employeeCourseDTO.setStatus(course.getStatus());
         employeeCourseDTO.setDueDate(course.getDueDate().toString());
         employeeCourseDTO.setAssignedAt(course.getAssignedAt().toString());
-        employeeCourseDTO.setModuleCompleted(course.getModulesCompleted());
+        employeeCourseDTO.setQuizcompleted(course.getQuizcompleted());
         return employeeCourseDTO;
     }
 

@@ -69,10 +69,10 @@ public class EmployeeController {
         return ResponseEntity.ok().body(announcementDTO);
     }
 
-    @PostMapping("/updateModuleCompleted/{courseId}")
+    @PostMapping("/updateModuleCompleted/{moduleId}/{employeeCourseId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    public ResponseEntity<GenericDTO> updateCompletedModule(@PathVariable("courseId") String courseId, Principal connectedUser) {
-        GenericDTO genericDTO = employeeService.updateCompletedModules(courseId,connectedUser);
+    public ResponseEntity<GenericDTO> updateCompletedModule(@PathVariable("moduleId") String moduleId,@PathVariable("employeeCourseId") String employeeCourseId) {
+        GenericDTO genericDTO = employeeService.updateCompletedModules(employeeCourseId, moduleId);
         return ResponseEntity.ok().body(genericDTO);
     }
 
@@ -91,11 +91,19 @@ public class EmployeeController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
-    /*@PostMapping("/startCourse/{courseId}")
+    @PostMapping("/startCourse/{courseId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<GenericDTO> changeCourseStatus(@PathVariable("courseId") String courseId, Principal connectedUser) {
         GenericDTO genericDTO = employeeService.startCourse(courseId,connectedUser);
         return ResponseEntity.ok().body(genericDTO);
-    }*/
+    }
+
+    @GetMapping("/viewProgress/{employeeId}/{courseId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ProgressDTO> getProgress(@PathVariable("employeeId") String employeeId, @PathVariable("courseId") String courseId
+            , Principal connectedUser) {
+        ProgressDTO progressDTO = employeeService.getCourseProgress(employeeId,courseId,connectedUser);
+        return ResponseEntity.ok().body(progressDTO);
+    }
 
 }

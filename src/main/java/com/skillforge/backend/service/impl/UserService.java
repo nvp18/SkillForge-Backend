@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +146,24 @@ public class UserService implements UserInterface {
             if(e instanceof GenericException) {
                 throw new GenericException();
             }
+            throw new InternalServerException();
+        }
+    }
+
+    @Override
+    public List<UserDTO> getAllEmployees() {
+        try {
+            List<User> users = repository.findAllEmployees();
+            List<UserDTO> userDTOS = new ArrayList<>();
+            for(User user : users) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setFirstName(user.getFirstName());
+                userDTO.setUserId(user.getUserId());
+                userDTO.setUserName(user.getUsername());
+                userDTOS.add(userDTO);
+            }
+            return userDTOS;
+        } catch (Exception e) {
             throw new InternalServerException();
         }
     }

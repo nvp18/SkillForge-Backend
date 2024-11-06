@@ -5,16 +5,11 @@ import com.skillforge.backend.dto.CourseDTO;
 import com.skillforge.backend.dto.EmployeeCourseDTO;
 import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.ModuleDTO;
-import com.skillforge.backend.entity.Course;
-import com.skillforge.backend.entity.EmployeeCourses;
+import com.skillforge.backend.entity.*;
 import com.skillforge.backend.entity.Module;
-import com.skillforge.backend.entity.User;
 import com.skillforge.backend.exception.InternalServerException;
 import com.skillforge.backend.exception.ResourceNotFoundException;
-import com.skillforge.backend.repository.CourseRepository;
-import com.skillforge.backend.repository.EmployeeCourseRepository;
-import com.skillforge.backend.repository.ModuleRepository;
-import com.skillforge.backend.repository.UserRepository;
+import com.skillforge.backend.repository.*;
 import com.skillforge.backend.service.CourseService;
 import com.skillforge.backend.utils.CourseStatus;
 import com.skillforge.backend.utils.ObjectMappers;
@@ -50,6 +45,9 @@ public class CourseServiceIMPL  implements CourseService {
 
     @Autowired
     private ModuleRepository moduleRepository;
+
+    @Autowired
+    private EmployeeCourseProgressRepository courseProgressRepository;
 
     @Override
     public CourseDTO createCourse(CourseDTO courseDTO) {
@@ -266,8 +264,18 @@ public class CourseServiceIMPL  implements CourseService {
             employeeCourses.setAssignedAt(LocalDateTime.now());
             employeeCourses.setStatus(CourseStatus.NOT_STARTED.toString());
             employeeCourses.setDueDate(LocalDateTime.now().plusDays(course.getDays()));
-            employeeCourses.setModulesCompleted(0);
+            employeeCourses.setQuizcompleted(Boolean.FALSE);
             EmployeeCourses savedCourse = employeeCourseRepository.save(employeeCourses);
+            List<EmployeeCourseProgress> employeeCourseProgressList = new ArrayList<>();
+            List<Module> modules = course.getCourseModules();
+            for(Module module : modules) {
+                EmployeeCourseProgress employeeCourseProgress = new EmployeeCourseProgress();
+                employeeCourseProgress.setEmployeeCourses(savedCourse);
+                employeeCourseProgress.setModule(module);
+                employeeCourseProgress.setIsCompleted(Boolean.FALSE);
+                employeeCourseProgressList.add(employeeCourseProgress);
+            }
+            courseProgressRepository.saveAll(employeeCourseProgressList);
             return ObjectMappers.employeecourseToEmployeecourseDTOMapper(savedCourse);
         } catch (Exception e) {
             throw new InternalServerException();

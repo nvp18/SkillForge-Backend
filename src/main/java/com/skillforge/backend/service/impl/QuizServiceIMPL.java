@@ -13,6 +13,7 @@ import com.skillforge.backend.repository.CourseRepository;
 import com.skillforge.backend.repository.EmployeeCourseRepository;
 import com.skillforge.backend.repository.QuizRepository;
 import com.skillforge.backend.service.QuizService;
+import com.skillforge.backend.utils.CourseStatus;
 import com.skillforge.backend.utils.ObjectMappers;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,6 +141,8 @@ public class QuizServiceIMPL implements QuizService {
             }
             Double percentage = (double) ((correctMarked/totalQuestions) * 100);
             if(percentage>=75.0) {
+                courses.setStatus(CourseStatus.COMPLETED.toString());
+                employeeCourseRepository.save(courses);
                 return GenericDTO.builder()
                         .message("Congratulations you have passed the exam with "+percentage+" %!!!")
                         .build();

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,5 +39,8 @@ public class Module {
     @ManyToOne
     @JoinColumn(name = "courseid")
     private Course course;
+
+    @OneToMany(mappedBy = "module",cascade =  CascadeType.REMOVE)
+    private List<EmployeeCourseProgress> employeeCourseProgressList;
 
 }

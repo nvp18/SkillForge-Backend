@@ -48,11 +48,11 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Announcement> announcements;
 
-    /*@OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Discussions> discussions;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private List<Quiz> quizList;*/
+    private List<Quiz> quizList;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<EmployeeCourses> employeeCourses = new ArrayList<>();

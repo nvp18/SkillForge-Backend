@@ -25,4 +25,6 @@ public interface EmployeeCourseRepository extends JpaRepository<EmployeeCourses,
             """)
     void deleteByEmployeeIdAndCourseId(String employeeId, String courseId);
 
+    EmployeeCourses findById(String id);
+
 }

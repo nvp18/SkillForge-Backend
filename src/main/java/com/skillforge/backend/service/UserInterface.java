@@ -5,6 +5,7 @@ import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.UserDTO;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 public interface UserInterface {
@@ -16,5 +17,7 @@ public interface UserInterface {
     UserDTO updateProfile(UserDTO userDTO, Principal connectedUser);
 
     GenericDTO changePassword(ChangePasswordDTO changePasswordDTO, Principal connectedUser);
+
+    List<UserDTO> getAllEmployees();
 
 }

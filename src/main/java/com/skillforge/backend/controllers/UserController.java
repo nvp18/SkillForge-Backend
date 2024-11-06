@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -54,5 +55,12 @@ public class UserController {
     public ResponseEntity<GenericDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, Principal connectedUser) {
         GenericDTO genericDTO = userService.changePassword(changePasswordDTO,connectedUser);
         return ResponseEntity.ok().body(genericDTO);
+    }
+
+    @GetMapping("/getAllEmployees")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<UserDTO>> getAllEmployees() {
+        List<UserDTO> userDTOS = userService.getAllEmployees();
+        return ResponseEntity.ok().body(userDTOS);
     }
 }
