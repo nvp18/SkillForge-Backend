@@ -35,8 +35,8 @@ public class Quiz {
     private String correctans;
 
     @ManyToOne
-    @JoinColumn(name = "courseid", nullable = false)
-    private Course course;
+    @JoinColumn(name = "coursequizid", nullable = false)
+    private CourseQuiz coursequiz;
 
 
 }

@@ -1,14 +1,13 @@
 package com.skillforge.backend.service.impl;
 
+import com.skillforge.backend.dto.CourseQuizDTO;
 import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.QuizAttemptDTO;
 import com.skillforge.backend.dto.QuizDTO;
-import com.skillforge.backend.entity.Course;
-import com.skillforge.backend.entity.EmployeeCourses;
-import com.skillforge.backend.entity.Quiz;
-import com.skillforge.backend.entity.User;
+import com.skillforge.backend.entity.*;
 import com.skillforge.backend.exception.InternalServerException;
 import com.skillforge.backend.exception.ResourceNotFoundException;
+import com.skillforge.backend.repository.CourseQuizRepository;
 import com.skillforge.backend.repository.CourseRepository;
 import com.skillforge.backend.repository.EmployeeCourseRepository;
 import com.skillforge.backend.repository.QuizRepository;
@@ -37,17 +36,26 @@ public class QuizServiceIMPL implements QuizService {
     @Autowired
     private EmployeeCourseRepository employeeCourseRepository;
 
+    @Autowired
+    private CourseQuizRepository courseQuizRepository;
+
     @Override
-    public GenericDTO createQuiz(String courseId, List<QuizDTO> quizDTOs) {
+    public GenericDTO createQuiz(String courseId, CourseQuizDTO courseQuizDTO) {
         try {
             Course course = courseRepository.findByCourseid(courseId);
             if(course==null) {
                 throw new ResourceNotFoundException();
             }
             List<Quiz> quizList = new ArrayList<>();
-            for(QuizDTO quizDTO: quizDTOs) {
+            CourseQuiz courseQuiz = CourseQuiz.builder()
+                    .course(course)
+                    .description(courseQuizDTO.getDescription())
+                    .title(courseQuizDTO.getTitle())
+                    .build();
+            CourseQuiz savedQuiz = courseQuizRepository.save(courseQuiz);
+            for(QuizDTO quizDTO: courseQuizDTO.getQuestions()) {
                 Quiz quiz = ObjectMappers.quizDTOtoQuiz(quizDTO);
-                quiz.setCourse(course);
+                quiz.setCoursequiz(savedQuiz);
                 quizList.add(quiz);
             }
             quizRepository.saveAll(quizList);
@@ -81,17 +89,24 @@ public class QuizServiceIMPL implements QuizService {
     }
 
     @Override
-    public List<QuizDTO> getCourseQuiz(String courseId) {
+    public CourseQuizDTO getCourseQuiz(String courseId) {
         try {
-            List<Quiz> quizList = quizRepository.findByCourseCourseid(courseId);
-            if(quizList == null) {
+            CourseQuiz courseQuiz = courseQuizRepository.findByCourseCourseid(courseId);
+            if(courseQuiz == null) {
                 throw new ResourceNotFoundException();
             }
+            CourseQuizDTO courseQuizDTO = CourseQuizDTO.builder()
+                    .courseid(courseQuiz.getCourse().getCourseid())
+                    .id(courseQuiz.getId())
+                    .description(courseQuiz.getDescription())
+                    .title(courseQuiz.getTitle())
+                    .build();
             List<QuizDTO> quizDTOS = new ArrayList<>();
-            for(Quiz quiz: quizList) {
+            for(Quiz quiz: courseQuiz.getQuizzes()) {
                 quizDTOS.add(ObjectMappers.quiztoQuizDTO(quiz));
             }
-            return quizDTOS;
+            courseQuizDTO.setQuestions(quizDTOS);
+            return courseQuizDTO;
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException();
         } catch (Exception e) {
@@ -100,19 +115,26 @@ public class QuizServiceIMPL implements QuizService {
     }
 
     @Override
-    public List<QuizDTO> getCourseQuizForEmployee(String courseId, Principal connectedUser) {
+    public CourseQuizDTO getCourseQuizForEmployee(String courseId, Principal connectedUser) {
         try {
             User user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
             EmployeeCourses courses = employeeCourseRepository.findByUserIdAndCourseId(user.getUserId(),courseId);
             if(courses==null) {
                 throw new ResourceNotFoundException();
             }
-            List<Quiz> quizList = quizRepository.findByCourseCourseid(courseId);
+            CourseQuiz courseQuiz = courseQuizRepository.findByCourseCourseid(courseId);
+            CourseQuizDTO courseQuizDTO = CourseQuizDTO.builder()
+                    .courseid(courseQuiz.getCourse().getCourseid())
+                    .id(courseQuiz.getId())
+                    .description(courseQuiz.getDescription())
+                    .title(courseQuiz.getTitle())
+                    .build();
             List<QuizDTO> quizDTOS = new ArrayList<>();
-            for(Quiz quiz : quizList) {
+            for(Quiz quiz: courseQuiz.getQuizzes()) {
                 quizDTOS.add(ObjectMappers.quiztoQuizDTO(quiz));
             }
-            return quizDTOS;
+            courseQuizDTO.setQuestions(quizDTOS);
+            return courseQuizDTO;
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException();
         } catch (Exception e) {
@@ -128,10 +150,10 @@ public class QuizServiceIMPL implements QuizService {
             if(courses==null) {
                 throw new ResourceNotFoundException();
             }
-            List<Quiz> quizList = quizRepository.findByCourseCourseid(courseId);
-            int totalQuestions =  quizList.size();
+            CourseQuiz courseQuiz = courseQuizRepository.findByCourseCourseid(courseId);
+            int totalQuestions =  courseQuiz.getQuizzes().size();
             int correctMarked = 0;
-            for(Quiz quiz : quizList) {
+            for(Quiz quiz : courseQuiz.getQuizzes()) {
                 String id = quiz.getId();
                 String correctAns = quiz.getCorrectans();
                 Optional<QuizAttemptDTO> quizAttemptDTO = quizAttemptDTOS.stream().filter(dto -> dto.getId().equals(id)).findFirst();
@@ -142,6 +164,7 @@ public class QuizServiceIMPL implements QuizService {
             Double percentage = (double) ((correctMarked/totalQuestions) * 100);
             if(percentage>=75.0) {
                 courses.setStatus(CourseStatus.COMPLETED.toString());
+                courses.setQuizcompleted(Boolean.TRUE);
                 employeeCourseRepository.save(courses);
                 return GenericDTO.builder()
                         .message("Congratulations you have passed the exam with "+percentage+" %!!!")

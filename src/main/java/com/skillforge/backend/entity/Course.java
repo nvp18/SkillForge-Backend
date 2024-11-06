@@ -51,8 +51,8 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<Discussions> discussions;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private List<Quiz> quizList;
+    @OneToOne(mappedBy = "course",cascade = CascadeType.REMOVE)
+    private CourseQuiz courseQuiz;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<EmployeeCourses> employeeCourses = new ArrayList<>();

@@ -78,8 +78,8 @@ public class EmployeeController {
 
     @GetMapping("/getQuiz/{courseId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    public ResponseEntity<List<QuizDTO>> detCourseQuiz(@PathVariable("courseId") String courseId, Principal connectedUser) {
-        List<QuizDTO> quizDTOS = quizService.getCourseQuizForEmployee(courseId,connectedUser);
+    public ResponseEntity<CourseQuizDTO> detCourseQuiz(@PathVariable("courseId") String courseId, Principal connectedUser) {
+        CourseQuizDTO quizDTOS = quizService.getCourseQuizForEmployee(courseId,connectedUser);
         return ResponseEntity.ok().body(quizDTOS);
     }
 

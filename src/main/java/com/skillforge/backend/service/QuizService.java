@@ -1,5 +1,6 @@
 package com.skillforge.backend.service;
 
+import com.skillforge.backend.dto.CourseQuizDTO;
 import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.QuizAttemptDTO;
 import com.skillforge.backend.dto.QuizDTO;
@@ -9,13 +10,13 @@ import java.util.List;
 
 public interface QuizService {
 
-    GenericDTO createQuiz(String courseId,List<QuizDTO> quizDTOs);
+    GenericDTO createQuiz(String courseId, CourseQuizDTO courseQuizDTO);
 
     GenericDTO deleteQuestion(String questionId);
 
-    List<QuizDTO> getCourseQuiz(String courseId);
+    CourseQuizDTO getCourseQuiz(String courseId);
 
-    List<QuizDTO> getCourseQuizForEmployee(String courseId, Principal connectedUser);
+    CourseQuizDTO getCourseQuizForEmployee(String courseId, Principal connectedUser);
 
     GenericDTO attemptQuiz(String courseId, Principal connectedUser, List<QuizAttemptDTO> quizAttemptDTOS);
 }
