@@ -159,7 +159,7 @@ public class CourseServiceIMPL  implements CourseService {
     }
 
     @Override
-    public String getModuleContent(String moduleId) {
+    public GenericDTO getModuleContent(String moduleId) {
         try {
             Module module = moduleRepository.findByModuleid(moduleId);
             if(module == null) {
@@ -167,7 +167,9 @@ public class CourseServiceIMPL  implements CourseService {
             }
             String modulecontent = module.getModulecontent();
             String preSignedURL = s3Config.getPreSignedURL(modulecontent);
-            return preSignedURL;
+            return GenericDTO.builder()
+                    .message(preSignedURL)
+                    .build();
         } catch (Exception e) {
             if(e instanceof ResourceNotFoundException) {
                 throw new ResourceNotFoundException();

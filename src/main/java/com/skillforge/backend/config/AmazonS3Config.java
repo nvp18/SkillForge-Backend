@@ -60,8 +60,16 @@ public class AmazonS3Config {
     }
 
     public String getPreSignedURL(String key) throws IOException {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName,
-                key).withMethod(HttpMethod.GET).withExpiration(new Date(System.currentTimeMillis()+36000000));
+        Date expiration = new Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 10 * 60 * 1000;
+        expiration.setTime(expTimeMillis);
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, key)
+                .withMethod(com.amazonaws.HttpMethod.GET)
+                .withExpiration(expiration)
+                .withResponseHeaders(new com.amazonaws.services.s3.model.ResponseHeaderOverrides()
+                        .withContentDisposition("inline")
+                        .withContentType("application/pdf"));
 
         URL preSignedURL = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
         return preSignedURL.toString();

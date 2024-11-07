@@ -22,7 +22,7 @@ public interface CourseService {
 
     List<ModuleDTO> getCourseModules(String courseId);
 
-    String getModuleContent(String moduleId);
+    GenericDTO getModuleContent(String moduleId);
 
     GenericDTO deleteCourseModule(String moduleId);
 

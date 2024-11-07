@@ -76,8 +76,8 @@ public class CourseController {
 
     @GetMapping("/getModuleContent/{moduleId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
-    public ResponseEntity<String> getModuleContent(@PathVariable("moduleId") String moduleId) {
-        String preSignedURL = courseService.getModuleContent(moduleId);
+    public ResponseEntity<GenericDTO> getModuleContent(@PathVariable("moduleId") String moduleId) {
+        GenericDTO preSignedURL = courseService.getModuleContent(moduleId);
         return ResponseEntity.ok().body(preSignedURL);
     }
 
