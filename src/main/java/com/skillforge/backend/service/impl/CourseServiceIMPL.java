@@ -16,12 +16,9 @@ import com.skillforge.backend.utils.ObjectMappers;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,18 +159,15 @@ public class CourseServiceIMPL  implements CourseService {
     }
 
     @Override
-    public Map<String,Object> getModuleContent(String moduleId) {
+    public String getModuleContent(String moduleId) {
         try {
             Module module = moduleRepository.findByModuleid(moduleId);
             if(module == null) {
                 throw new ResourceNotFoundException();
             }
             String modulecontent = module.getModulecontent();
-            InputStreamResource inputStreamResource = s3Config.getFile(modulecontent);
-            Map<String, Object> map = new HashMap<>();
-            map.put("key",modulecontent);
-            map.put("inputstream",inputStreamResource);
-            return map;
+            String preSignedURL = s3Config.getPreSignedURL(modulecontent);
+            return preSignedURL;
         } catch (Exception e) {
             if(e instanceof ResourceNotFoundException) {
                 throw new ResourceNotFoundException();

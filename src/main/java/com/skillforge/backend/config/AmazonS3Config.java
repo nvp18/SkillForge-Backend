@@ -1,5 +1,6 @@
 package com.skillforge.backend.config;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -16,9 +17,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class AmazonS3Config {
@@ -57,10 +59,12 @@ public class AmazonS3Config {
         return key;
     }
 
-    public InputStreamResource getFile(String key) throws IOException {
-        S3Object document = amazonS3Client.getObject(bucketName,key);
-        S3ObjectInputStream inputStream = document.getObjectContent();
-        return new InputStreamResource(inputStream);
+    public String getPreSignedURL(String key) throws IOException {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName,
+                key).withMethod(HttpMethod.GET).withExpiration(new Date(System.currentTimeMillis()+36000000));
+
+        URL preSignedURL = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
+        return preSignedURL.toString();
     }
 
     public boolean deleteFile(String key) {

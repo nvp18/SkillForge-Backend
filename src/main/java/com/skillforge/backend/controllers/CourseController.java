@@ -76,12 +76,9 @@ public class CourseController {
 
     @GetMapping("/getModuleContent/{moduleId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
-    public ResponseEntity<InputStreamResource> getModuleContent(@PathVariable("moduleId") String moduleId) {
-        Map<String, Object> map = courseService.getModuleContent(moduleId);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=\""+map.get("modulecontent"+"\""))
-                .contentType(MediaType.APPLICATION_PDF)
-                .body((InputStreamResource) map.get("inputstream"));
+    public ResponseEntity<String> getModuleContent(@PathVariable("moduleId") String moduleId) {
+        String preSignedURL = courseService.getModuleContent(moduleId);
+        return ResponseEntity.ok().body(preSignedURL);
     }
 
     @DeleteMapping("/deleteCourseModule/{moduleId}")
