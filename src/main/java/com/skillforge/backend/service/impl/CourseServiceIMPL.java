@@ -290,4 +290,19 @@ public class CourseServiceIMPL  implements CourseService {
             throw new InternalServerException();
         }
     }
+
+    @Override
+    public List<EmployeeCourseDTO> getAllCoursesOfEmployee(String employeeId) {
+        try {
+            List<EmployeeCourses> employeeCourses = employeeCourseRepository.findByUserUserId(employeeId);
+            List<EmployeeCourseDTO> employeeCourseDTOS = new ArrayList<>();
+            for(EmployeeCourses courses: employeeCourses) {
+                EmployeeCourseDTO employeeCourseDTO = ObjectMappers.employeecourseToEmployeecourseDTOMapper(courses);
+                employeeCourseDTOS.add(employeeCourseDTO);
+            }
+            return employeeCourseDTOS;
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
 }

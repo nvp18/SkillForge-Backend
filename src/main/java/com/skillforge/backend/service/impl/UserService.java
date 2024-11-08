@@ -160,6 +160,8 @@ public class UserService implements UserInterface {
                 userDTO.setFirstName(user.getFirstName());
                 userDTO.setUserId(user.getUserId());
                 userDTO.setUserName(user.getUsername());
+                userDTO.setLastName(user.getLastName());
+                userDTO.setEmail(user.getEmail());
                 userDTOS.add(userDTO);
             }
             return userDTOS;

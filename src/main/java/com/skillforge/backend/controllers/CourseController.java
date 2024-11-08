@@ -163,4 +163,11 @@ public class CourseController {
         GenericDTO genericDTO = discussionService.deleteDiscussion(discussionId);
         return ResponseEntity.ok().body(genericDTO);
     }
+
+    @GetMapping("/getAllCoursesOfEmployee/{employeeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<EmployeeCourseDTO>> getAllCoursesOfEmployee(@PathVariable("employeeId") String employeeId) {
+        List<EmployeeCourseDTO> employeeCourseDTOS = courseService.getAllCoursesOfEmployee(employeeId);
+        return ResponseEntity.ok().body(employeeCourseDTOS);
+    }
 }

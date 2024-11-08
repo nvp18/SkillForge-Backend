@@ -33,4 +33,6 @@ public interface CourseService {
     EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID);
 
     GenericDTO deassignCourseToEmployee(String courseId, String employeeId);
+
+    List<EmployeeCourseDTO> getAllCoursesOfEmployee(String employeeId);
 }

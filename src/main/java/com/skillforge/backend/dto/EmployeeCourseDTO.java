@@ -17,7 +17,6 @@ public class EmployeeCourseDTO {
     private String dueDate;
     private String status;
     private Boolean quizcompleted;
-    private UserDTO user;
     private CourseDTO course;
 
 }
