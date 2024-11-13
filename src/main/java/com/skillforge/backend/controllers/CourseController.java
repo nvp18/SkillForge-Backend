@@ -93,7 +93,7 @@ public class CourseController {
     }
 
     @GetMapping("/getCourseDetails/{courseID}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
     public ResponseEntity<CourseDTO> getCourseDetails(@PathVariable("courseID") String courseId) {
         CourseDTO courseDTO = courseService.getCourseDetails(courseId);
         return ResponseEntity.ok().body(courseDTO);
