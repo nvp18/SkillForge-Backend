@@ -99,7 +99,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/viewProgress/{employeeId}/{courseId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
     public ResponseEntity<ProgressDTO> getProgress(@PathVariable("employeeId") String employeeId, @PathVariable("courseId") String courseId
             , Principal connectedUser) {
         ProgressDTO progressDTO = employeeService.getCourseProgress(employeeId,courseId,connectedUser);
