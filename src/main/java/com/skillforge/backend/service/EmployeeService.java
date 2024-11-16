@@ -11,7 +11,7 @@ public interface EmployeeService {
 
     List<EmployeeCourseDTO> getAllCourses(Principal connectedUser);
 
-    GenericDTO updateCompletedModules(String employeeCourseId, String moduleId);
+    GenericDTO updateCompletedModules(String moduleId, String courseId,Principal connectedUser);
 
     GenericDTO startCourse(String courseId, Principal connectedUser);
 

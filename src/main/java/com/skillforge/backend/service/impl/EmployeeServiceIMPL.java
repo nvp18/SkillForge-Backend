@@ -53,11 +53,12 @@ public class EmployeeServiceIMPL implements EmployeeService {
     }
 
     @Override
-    public GenericDTO updateCompletedModules(String employeeCourseId, String moduleId) {
+    public GenericDTO updateCompletedModules(String moduleId, String courseId, Principal connectedUser) {
         try {
-            EmployeeCourses courses = employeeCourseRepository.findById(employeeCourseId);
+            User user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
+            EmployeeCourses courses = employeeCourseRepository.findByUserIdAndCourseId(user.getUserId(),courseId);
             if(courses.getStatus().equals(CourseStatus.STARTED.toString())) {
-                EmployeeCourseProgress employeeCourseProgress = courseProgressRepository.findByEmployeeCourseIdAndModuleId(employeeCourseId, moduleId);
+                EmployeeCourseProgress employeeCourseProgress = courseProgressRepository.findByEmployeeCourseIdAndModuleId(courses.getId(), moduleId);
                 if (employeeCourseProgress == null) {
                     throw new ResourceNotFoundException();
                 }

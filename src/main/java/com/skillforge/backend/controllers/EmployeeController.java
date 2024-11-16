@@ -69,10 +69,10 @@ public class EmployeeController {
         return ResponseEntity.ok().body(announcementDTO);
     }
 
-    @PostMapping("/updateModuleCompleted/{moduleId}/{employeeCourseId}")
+    @PostMapping("/updateModuleCompleted/{moduleId}/{courseId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    public ResponseEntity<GenericDTO> updateCompletedModule(@PathVariable("moduleId") String moduleId,@PathVariable("employeeCourseId") String employeeCourseId) {
-        GenericDTO genericDTO = employeeService.updateCompletedModules(employeeCourseId, moduleId);
+    public ResponseEntity<GenericDTO> updateCompletedModule(@PathVariable("moduleId") String moduleId,@PathVariable("courseId") String courseId, Principal connectedUser) {
+        GenericDTO genericDTO = employeeService.updateCompletedModules(moduleId,courseId ,connectedUser);
         return ResponseEntity.ok().body(genericDTO);
     }
 
