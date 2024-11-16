@@ -1,6 +1,7 @@
 package com.skillforge.backend.service.impl;
 
 import com.skillforge.backend.dto.EmployeeCourseDTO;
+import com.skillforge.backend.dto.EmployeeCourseProgressDTO;
 import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.dto.ProgressDTO;
 import com.skillforge.backend.entity.Course;
@@ -114,6 +115,32 @@ public class EmployeeServiceIMPL implements EmployeeService {
             return ProgressDTO.builder()
                     .courseProgress(courseProgress)
                     .build();
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
+
+    @Override
+    public List<EmployeeCourseProgressDTO> getModuleProgress(String courseId, Principal connectedUser) {
+        try {
+            User user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
+            EmployeeCourses employeeCourses = employeeCourseRepository.findByUserIdAndCourseId(user.getUserId(), courseId);
+            if(employeeCourses==null) {
+                throw new ResourceNotFoundException();
+            }
+            List<EmployeeCourseProgress> employeeCourseProgressList = courseProgressRepository.findByEmployeeCourseId(employeeCourses.getId());
+            List<EmployeeCourseProgressDTO> employeeCourseProgressDTOS = new ArrayList<>();
+            for(EmployeeCourseProgress employeeCourseProgress : employeeCourseProgressList) {
+                EmployeeCourseProgressDTO employeeCourseProgressDTO = EmployeeCourseProgressDTO.builder()
+                        .id(employeeCourseProgress.getId())
+                        .moduleId(employeeCourseProgress.getModule().getModuleid())
+                        .isCompleted(employeeCourseProgress.getIsCompleted())
+                        .build();
+                employeeCourseProgressDTOS.add(employeeCourseProgressDTO);
+            }
+            return employeeCourseProgressDTOS;
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException();
         } catch (Exception e) {
