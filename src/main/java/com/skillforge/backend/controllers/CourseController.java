@@ -135,7 +135,7 @@ public class CourseController {
     }
 
     @GetMapping("/getQuiz/{courseId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN','EMPLOYEE')")
     public ResponseEntity<CourseQuizDTO> detCourseQuiz(@PathVariable("courseId") String courseId) {
         CourseQuizDTO quizDTOS = quizService.getCourseQuiz(courseId);
         return ResponseEntity.ok().body(quizDTOS);
