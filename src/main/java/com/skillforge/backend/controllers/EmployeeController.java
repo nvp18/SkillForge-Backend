@@ -113,4 +113,10 @@ public class EmployeeController {
         return ResponseEntity.ok().body(employeeCourseProgressDTOS);
     }
 
+    @GetMapping("/getCourseStatus/{courseId}")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public ResponseEntity<EmployeeCourseDTO> getCourseStatus(@PathVariable("courseId") String courseId, Principal connectedUser) {
+        EmployeeCourseDTO employeeCourseDTO = employeeService.getCourseStatus(courseId,connectedUser);
+        return ResponseEntity.ok().body(employeeCourseDTO);
+    }
 }

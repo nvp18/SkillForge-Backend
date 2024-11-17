@@ -147,4 +147,23 @@ public class EmployeeServiceIMPL implements EmployeeService {
             throw new InternalServerException();
         }
     }
+
+    @Override
+    public EmployeeCourseDTO getCourseStatus(String courseId, Principal connectedUser) {
+        try {
+            User user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
+            EmployeeCourses employeeCourses = employeeCourseRepository.findByUserIdAndCourseId(user.getUserId(), courseId);
+            if(employeeCourses==null) {
+                throw new ResourceNotFoundException();
+            }
+            EmployeeCourseDTO employeeCourseDTO = EmployeeCourseDTO.builder()
+                    .status(employeeCourses.getStatus())
+                    .build();
+            return employeeCourseDTO;
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
 }

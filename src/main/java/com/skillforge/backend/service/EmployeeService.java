@@ -21,4 +21,6 @@ public interface EmployeeService {
 
     List<EmployeeCourseProgressDTO> getModuleProgress(String courseId, Principal connectedUser);
 
+    EmployeeCourseDTO getCourseStatus(String courseId, Principal connectedUser);
+
 }
