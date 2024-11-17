@@ -120,7 +120,7 @@ public class CourseController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
-    @PostMapping("/createQuiz/{quizId}")
+    @DeleteMapping("/deleteQuiz/{quizId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<GenericDTO> deleteQuiz(@PathVariable("quizId") String quizId) {
         GenericDTO genericDTO = quizService.deleteQuiz(quizId);
