@@ -95,7 +95,7 @@ public class QuizServiceIMPL implements QuizService {
             if(courseQuiz == null) {
                 throw new ResourceNotFoundException();
             }
-            CourseQuizDTO courseQuizDTO = CourseQuizDTO.builder()
+            CourseQuizDTO courseQuizDTO =  CourseQuizDTO.builder()
                     .courseid(courseQuiz.getCourse().getCourseid())
                     .id(courseQuiz.getId())
                     .description(courseQuiz.getDescription())
