@@ -15,15 +15,15 @@ jobs:
 
       - name: Set up SSH for EC2
         run: |
-          echo "${{ secrets.EC2_SSH_KEY_BASE64 }}" | base64 -d > ec2-key.pem
-          chmod 600 ec2-key.pem
+          echo "${{ secrets.EC2_SSH_KEY_BASE64 }}" > test1.pem
+          chmod 600 test1.pem
           ssh-keyscan -H 3.228.66.243 >> ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
-          ssh-add ec2-key.pem
+          ssh-add test1.pem
 
       - name: Deploy to EC2
         run: |
-          ssh -i ec2-key.pem ubuntu@3.228.66.243 << 'EOF'
+          ssh -i test1.pem ubuntu@3.228.66.243 << 'EOF'
             # Navigate to project or clone if not existing
             cd /home/ubuntu/SkillForge-Backend || git clone git@github.com:nvp18/SkillForge-Backend.git /home/ubuntu/SkillForge-Backend
             cd /home/ubuntu/SkillForge-Backend
