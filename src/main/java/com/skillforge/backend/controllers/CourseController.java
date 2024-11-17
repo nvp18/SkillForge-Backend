@@ -114,7 +114,7 @@ public class CourseController {
     }
 
     @PostMapping("/createQuiz/{courseId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<GenericDTO> createQuiz(@PathVariable("courseId") String courseId, @RequestBody CourseQuizDTO courseQuizDTO) {
         GenericDTO genericDTO = quizService.createQuiz(courseId,courseQuizDTO);
         return ResponseEntity.ok().body(genericDTO);
@@ -135,7 +135,7 @@ public class CourseController {
     }
 
     @GetMapping("/getQuiz/{courseId}")
-    @PreAuthorize("hasAuthority('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
     public ResponseEntity<CourseQuizDTO> detCourseQuiz(@PathVariable("courseId") String courseId) {
         CourseQuizDTO quizDTOS = quizService.getCourseQuiz(courseId);
         return ResponseEntity.ok().body(quizDTOS);
