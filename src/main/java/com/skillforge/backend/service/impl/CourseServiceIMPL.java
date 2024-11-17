@@ -233,15 +233,19 @@ public class CourseServiceIMPL  implements CourseService {
     public CourseDTO getCourseDetails(String courseId) {
         try {
             Course course = courseRepository.findByCourseid(courseId);
-            if(course==null) {
+            if (course == null) {
                 throw new ResourceNotFoundException();
             }
-            CourseDTO courseDTO = ObjectMappers.courseToCourseDTOMapper(course);
-            return courseDTO;
+            return ObjectMappers.courseToCourseDTOMapper(course);
+        } catch (ResourceNotFoundException e) {
+            // Let this exception propagate, as it's expected in some cases
+            throw e;
         } catch (Exception e) {
+            // Catch only unexpected exceptions and rethrow as InternalServerException
             throw new InternalServerException();
         }
     }
+
 
     @Override
     public EmployeeCourseDTO assignCourseToEmployee(String courseId, String employeeID) {
@@ -273,7 +277,11 @@ public class CourseServiceIMPL  implements CourseService {
             }
             courseProgressRepository.saveAll(employeeCourseProgressList);
             return ObjectMappers.employeecourseToEmployeecourseDTOMapper(savedCourse);
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
+            throw e;
+        }
+        // Let this exception propagate, as it's expected in some cas
+        catch (Exception e) {
             throw new InternalServerException();
         }
     }

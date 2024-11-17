@@ -9,9 +9,7 @@ import com.skillforge.backend.entity.User;
 import com.skillforge.backend.exception.ResourceNotFoundException;
 import com.skillforge.backend.repository.ConcernRepository;
 import com.skillforge.backend.repository.ReplyRepository;
-import com.skillforge.backend.service.ConcernsService;
 import com.skillforge.backend.service.impl.ConcernsServiceIMPL;
-import com.skillforge.backend.utils.ObjectMappers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ConcernServiceTests {
+class ConcernServiceIMPLTests {
 
 	@Mock
 	private ConcernRepository concernRepository;
