@@ -3,7 +3,7 @@ name: Deploy to EC2 on Push to Main
 on:
   push:
     branches:
-      - main  # Trigger the workflow on any push to the main branch
+      - main
 
 jobs:
   deploy:
@@ -14,22 +14,23 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up SSH for EC2
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY_BASE64 }}
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY_BASE64 }}" | base64 -d > ec2-key.pem
+          chmod 600 ec2-key.pem
+          ssh-keyscan -H 3.228.66.243 >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ec2-key.pem
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@3.228.66.243 << 'EOF'
-            # Navigate to the project directory or clone if it doesn't exist
-            cd /home/ec2-user/SkillForge-Backend || git clone git@github.com:nvp18/SkillForge-Backend.git /home/ec2-user/SkillForge-Backend
-            cd /home/ec2-user/SkillForge-Backend
+          ssh -i ec2-key.pem ubuntu@3.228.66.243 << 'EOF'
+            # Navigate to project or clone if not existing
+            cd /home/ubuntu/SkillForge-Backend || git clone git@github.com:nvp18/SkillForge-Backend.git /home/ubuntu/SkillForge-Backend
+            cd /home/ubuntu/SkillForge-Backend
 
-            # Pull the latest changes
+            # Pull latest code and restart backend service
             git pull origin main
-
-            # Stop and restart your backend service
-            mvn spring-boot:stop || echo "Service not running, skipping stop"
+            mvn spring-boot:stop || echo "Service not running"
             mvn clean install
             mvn spring-boot:run
           EOF
