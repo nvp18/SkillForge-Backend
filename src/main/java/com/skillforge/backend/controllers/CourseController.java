@@ -134,6 +134,13 @@ public class CourseController {
         return ResponseEntity.ok().body(quizDTOS);
     }
 
+    @GetMapping("/getQuestions/{quizId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<QuizDTO>> getQuizQuestions(@PathVariable("quizId") String quizId) {
+        List<QuizDTO> quizDTOS = quizService.getQuizQuestions(quizId);
+        return ResponseEntity.ok().body(quizDTOS);
+    }
+
     @PostMapping("/postDiscussion/{courseId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','EMPLOYEE')")
     public ResponseEntity<GenericDTO> postDiscussion(@PathVariable("courseId") String courseId, @RequestBody DiscussionDTO discussionDTO,

@@ -101,11 +101,6 @@ public class QuizServiceIMPL implements QuizService {
                     .description(courseQuiz.getDescription())
                     .title(courseQuiz.getTitle())
                     .build();
-            List<QuizDTO> quizDTOS = new ArrayList<>();
-            for(Quiz quiz: courseQuiz.getQuizzes()) {
-                quizDTOS.add(ObjectMappers.quiztoQuizDTO(quiz));
-            }
-            courseQuizDTO.setQuestions(quizDTOS);
             return courseQuizDTO;
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException();
@@ -176,6 +171,29 @@ public class QuizServiceIMPL implements QuizService {
             }
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
+
+    @Override
+    public List<QuizDTO> getQuizQuestions(String quizId) {
+        try {
+            List<Quiz> quizzes = quizRepository.findByCourseQuizId(quizId);
+            List<QuizDTO> quizDTOS = new ArrayList<>();
+            for(Quiz quiz: quizzes) {
+                QuizDTO quizDTO = QuizDTO.builder()
+                        .question(quiz.getQuestion())
+                        .option1(quiz.getOption1())
+                        .option2(quiz.getOption2())
+                        .option4(quiz.getOption4())
+                        .option3(quiz.getOption3())
+                        .id(quiz.getId())
+                        .correctans(quiz.getCorrectans())
+                        .build();
+                quizDTOS.add(quizDTO);
+            }
+            return quizDTOS;
         } catch (Exception e) {
             throw new InternalServerException();
         }

@@ -19,4 +19,6 @@ public interface QuizService {
     CourseQuizDTO getCourseQuizForEmployee(String courseId, Principal connectedUser);
 
     GenericDTO attemptQuiz(String courseId, Principal connectedUser, List<QuizAttemptDTO> quizAttemptDTOS);
+
+    List<QuizDTO> getQuizQuestions(String quizId);
 }
