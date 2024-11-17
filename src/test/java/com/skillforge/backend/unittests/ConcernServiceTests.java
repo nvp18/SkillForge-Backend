@@ -151,7 +151,4 @@ class ConcernServiceTests {
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 	}
-
-
-
 }
