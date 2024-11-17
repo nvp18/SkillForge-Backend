@@ -120,9 +120,16 @@ public class CourseController {
         return ResponseEntity.ok().body(genericDTO);
     }
 
+    @PostMapping("/createQuiz/{quizId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenericDTO> deleteQuiz(@PathVariable("quizId") String quizId) {
+        GenericDTO genericDTO = quizService.deleteQuiz(quizId);
+        return ResponseEntity.ok().body(genericDTO);
+    }
+
     @DeleteMapping("/deleteQuestion/{questionId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<GenericDTO> deleteQuiz(@PathVariable("questionId") String questionId) {
+    public ResponseEntity<GenericDTO> deleteQuizQuestion(@PathVariable("questionId") String questionId) {
         GenericDTO genericDTO = quizService.deleteQuestion(questionId);
         return ResponseEntity.ok().body(genericDTO);
     }
@@ -176,5 +183,13 @@ public class CourseController {
     public ResponseEntity<List<EmployeeCourseDTO>> getAllCoursesOfEmployee(@PathVariable("employeeId") String employeeId) {
         List<EmployeeCourseDTO> employeeCourseDTOS = courseService.getAllCoursesOfEmployee(employeeId);
         return ResponseEntity.ok().body(employeeCourseDTOS);
+    }
+
+    @PostMapping("/submitQuiz/{courseId}")
+    @PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN')")
+    public ResponseEntity<GenericDTO> attemptQuiz(@PathVariable("courseId") String courseId, Principal connectedUser
+            ,@RequestBody List<QuizAttemptDTO> quizAttemptDTOS) {
+        GenericDTO genericDTO = quizService.attemptQuiz(courseId,connectedUser,quizAttemptDTOS);
+        return ResponseEntity.ok().body(genericDTO);
     }
 }

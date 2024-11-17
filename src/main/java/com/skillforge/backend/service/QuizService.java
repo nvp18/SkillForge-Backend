@@ -21,4 +21,6 @@ public interface QuizService {
     GenericDTO attemptQuiz(String courseId, Principal connectedUser, List<QuizAttemptDTO> quizAttemptDTOS);
 
     List<QuizDTO> getQuizQuestions(String quizId);
+
+    GenericDTO deleteQuiz(String quizId);
 }

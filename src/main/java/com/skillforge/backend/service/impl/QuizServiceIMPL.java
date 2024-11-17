@@ -199,5 +199,17 @@ public class QuizServiceIMPL implements QuizService {
         }
     }
 
+    @Override
+    public GenericDTO deleteQuiz(String quizId) {
+        try {
+            CourseQuiz courseQuiz = courseQuizRepository.findById(quizId);
+            courseQuizRepository.delete(courseQuiz);
+            return GenericDTO.builder()
+                    .message("Quiz Delete Successfully")
+                    .build();
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
+    }
 
 }

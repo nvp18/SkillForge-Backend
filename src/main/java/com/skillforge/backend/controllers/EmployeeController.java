@@ -83,14 +83,6 @@ public class EmployeeController {
         return ResponseEntity.ok().body(quizDTOS);
     }
 
-    @PostMapping("/attemptQuiz/{courseId}")
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
-    public ResponseEntity<GenericDTO> attemptQuiz(@PathVariable("courseId") String courseId, Principal connectedUser
-            ,@RequestBody List<QuizAttemptDTO> quizAttemptDTOS) {
-        GenericDTO genericDTO = quizService.attemptQuiz(courseId,connectedUser,quizAttemptDTOS);
-        return ResponseEntity.ok().body(genericDTO);
-    }
-
     @PostMapping("/startCourse/{courseId}")
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public ResponseEntity<GenericDTO> changeCourseStatus(@PathVariable("courseId") String courseId, Principal connectedUser) {
