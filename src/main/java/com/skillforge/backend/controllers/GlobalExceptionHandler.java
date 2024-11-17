@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotAuthenticatedException.class)
-    ResponseEntity<ErrorDTO> handleRequestResourceNotFoundException() {
+    public ResponseEntity<ErrorDTO> handleRequestResourceNotFoundException() {
         ErrorDTO errorDTO = ErrorDTO
                 .builder()
                 .errorCode(ExceptionCodes.USER_NOT_AUTHENTICATED.toString())
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    ResponseEntity<ErrorDTO> handleUserNotFoundException() {
+    public ResponseEntity<ErrorDTO> handleUserNotFoundException() {
         ErrorDTO errorDTO = ErrorDTO
                 .builder()
                 .errorCode(ExceptionCodes.USER_NOT_FOUND.toString())
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InternalServerException.class)
-    ResponseEntity<ErrorDTO> handleInternalServerException() {
+    public ResponseEntity<ErrorDTO> handleInternalServerException() {
         ErrorDTO errorDTO = ErrorDTO
                 .builder()
                 .errorCode(ExceptionCodes.INTERNAL_SERVER_ERROR.toString())
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    ResponseEntity<ErrorDTO> handleResourceNotFoundException() {
+    public ResponseEntity<ErrorDTO> handleResourceNotFoundException() {
         ErrorDTO errorDTO = ErrorDTO
                 .builder()
                 .errorCode(ExceptionCodes.RESOURCE_NOT_FOUND.toString())
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GenericException.class)
-    ResponseEntity<ErrorDTO> handleGenericException() {
+    public ResponseEntity<ErrorDTO> handleGenericException() {
         ErrorDTO errorDTO = ErrorDTO
                 .builder()
                 .errorCode(ExceptionCodes.GENERIC_EXCEPTION.toString())

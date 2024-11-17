@@ -8,6 +8,7 @@ import com.skillforge.backend.dto.GenericDTO;
 import com.skillforge.backend.entity.*;
 import com.skillforge.backend.repository.*;
 import com.skillforge.backend.service.impl.CourseServiceIMPL;
+import com.skillforge.backend.utils.CourseStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -62,6 +63,18 @@ class CourseServiceIMPLTests {
         mockCourse.setCreatedAt(LocalDateTime.now());
         mockCourse.setUpdatedAt(LocalDateTime.now());
         mockCourse.setDays(2);
+        mockModule = new Module();
+        mockModule.setCourse(mockCourse);
+        mockModule.setModulecontent("Sample C");
+        mockModule.setModuleName("sample 3");
+        mockModule.setModulenumber(34);
+        mockModule.setCreatedAt(LocalDateTime.now());
+        mockModule.setUpdatedAt(LocalDateTime.now());
+        mockModule.setModuleid("Sdadf");
+        mockModule.setEmployeeCourseProgressList(new ArrayList<>());
+        List<Module> modules = new ArrayList<>();
+        modules.add(mockModule);
+        mockCourse.setCourseModules(modules);
     }
 
     @Test
@@ -140,7 +153,15 @@ class CourseServiceIMPLTests {
         User mockUser = new User();
         when(userRepository.findByUserId("emp123")).thenReturn(mockUser);
         when(courseRepository.findByCourseid("course123")).thenReturn(mockCourse);
-        when(employeeCourseRepository.save(any(EmployeeCourses.class))).thenReturn(new EmployeeCourses());
+        EmployeeCourses employeeCourses = new EmployeeCourses();
+        employeeCourses.setCourse(mockCourse);
+        employeeCourses.setAssignedAt(LocalDateTime.now());
+        employeeCourses.setQuizcompleted(Boolean.TRUE);
+        employeeCourses.setUser(mockUser);
+        employeeCourses.setStatus(CourseStatus.NOT_STARTED.toString());
+        employeeCourses.setDueDate(LocalDateTime.now());
+        employeeCourses.setId("emp");
+        when(employeeCourseRepository.save(any(EmployeeCourses.class))).thenReturn(employeeCourses);
 
         EmployeeCourseDTO result;
         result = courseService.assignCourseToEmployee("course123", "emp123");
