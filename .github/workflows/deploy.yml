@@ -1,9 +1,9 @@
-name: Deploy to EC2 on Pull Request
+name: Deploy to EC2 on Push to Main
 
 on:
-  pull_request:
+  push:
     branches:
-      - main  # Or the branch you want to trigger deployment from
+      - main  # Trigger the workflow on any push to the main branch
 
 jobs:
   deploy:
@@ -29,7 +29,7 @@ jobs:
             git pull origin main
 
             # Stop and restart your backend service
-            mvn spring-boot:stop
+            mvn spring-boot:stop || echo "Service not running, skipping stop"
             mvn clean install
             mvn spring-boot:run
           EOF
