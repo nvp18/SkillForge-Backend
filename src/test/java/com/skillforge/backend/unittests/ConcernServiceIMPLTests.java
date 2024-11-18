@@ -6,6 +6,7 @@ import com.skillforge.backend.dto.ReplyDTO;
 import com.skillforge.backend.entity.ConcernReply;
 import com.skillforge.backend.entity.Concerns;
 import com.skillforge.backend.entity.User;
+import com.skillforge.backend.exception.InternalServerException;
 import com.skillforge.backend.exception.ResourceNotFoundException;
 import com.skillforge.backend.repository.ConcernRepository;
 import com.skillforge.backend.repository.ReplyRepository;
@@ -60,6 +61,10 @@ class ConcernServiceIMPLTests {
 		Concerns mockConcern = new Concerns();
 		mockConcern.setUser(mockUser);
 		mockConcern.setCreatedat(LocalDateTime.now());
+		ConcernReply concernReply = new ConcernReply();
+		concernReply.setRepliedat(LocalDateTime.now());
+		concernReply.setRepliedBy("abdc");
+		mockConcern.setConcernReplies(List.of(concernReply));
 		when(concernRepository.findByUserUserId("123")).thenReturn(List.of(mockConcern));
 
 		// Act
@@ -68,6 +73,24 @@ class ConcernServiceIMPLTests {
 		// Assert
 		assertNotNull(result);
 		assertEquals(1, result.size());
+		Mockito.verify(concernRepository, times(1)).findByUserUserId("123");
+	}
+
+	@Test
+	void testGetEmployeeConcernsFailure() {
+		// Arrange
+		Concerns mockConcern = new Concerns();
+		mockConcern.setUser(mockUser);
+		mockConcern.setCreatedat(LocalDateTime.now());
+		ConcernReply concernReply = new ConcernReply();
+		concernReply.setRepliedat(LocalDateTime.now());
+		concernReply.setRepliedBy("abdc");
+		mockConcern.setConcernReplies(List.of(concernReply));
+		when(concernRepository.findByUserUserId("123")).thenThrow(new RuntimeException());
+
+		// Act
+		assertThrows(InternalServerException.class, () -> concernsService.getEmployeeConcerns(mockPrincipal));
+
 		Mockito.verify(concernRepository, times(1)).findByUserUserId("123");
 	}
 
@@ -86,6 +109,22 @@ class ConcernServiceIMPLTests {
 
 		// Assert
 		assertEquals("Concern Raised Successfully", result.getMessage());
+		verify(concernRepository, times(1)).save(any(Concerns.class));
+	}
+
+	@Test
+	void testRaiseAConcernFailure() {
+		// Arrange
+		ConcernDTO concernDTO = new ConcernDTO();
+		concernDTO.setDescription("Test Concern");
+		concernDTO.setSubject("Test Subject");
+
+		when(concernRepository.save(any(Concerns.class))).thenThrow(new RuntimeException());
+
+		// Act
+		assertThrows(InternalServerException.class, () -> concernsService.raiseAConcern(concernDTO,mockPrincipal));
+
+		// Assert
 		verify(concernRepository, times(1)).save(any(Concerns.class));
 	}
 
@@ -122,6 +161,25 @@ class ConcernServiceIMPLTests {
 	}
 
 	@Test
+	void testReplyToConcern_InternalServerException() {
+		// Arrange
+		ReplyDTO replyDTO = new ReplyDTO();
+		replyDTO.setReply("Test Reply");
+
+		Concerns mockConcern = new Concerns();
+		when(concernRepository.findById("1")).thenReturn(Optional.of(mockConcern));
+		when(replyRepository.save(any(ConcernReply.class))).thenThrow(new RuntimeException());
+
+		// Act
+		assertThrows(InternalServerException.class, () -> {
+			concernsService.replyToConcern(replyDTO, "1", mockPrincipal);
+		});
+
+		// Assert
+		verify(replyRepository, times(1)).save(any(ConcernReply.class));
+	}
+
+	@Test
 	void testGetAllConcerns() {
 		// Arrange
 		Concerns mockConcern = new Concerns();
@@ -134,6 +192,22 @@ class ConcernServiceIMPLTests {
 		// Assert
 		assertNotNull(result);
 		assertEquals(1, result.size());
+		verify(concernRepository, times(1)).findAll();
+	}
+
+	@Test
+	void testGetAllConcernsFailure() {
+		// Arrange
+		Concerns mockConcern = new Concerns();
+		mockConcern.setCreatedat(LocalDateTime.now());
+		when(concernRepository.findAll()).thenThrow(new RuntimeException());
+
+		// Act
+		assertThrows(InternalServerException.class, () -> {
+			concernsService.getAllConcerns();
+		});
+
+		// Assert
 		verify(concernRepository, times(1)).findAll();
 	}
 

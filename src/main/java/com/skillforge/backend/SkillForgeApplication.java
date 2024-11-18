@@ -16,16 +16,16 @@ public class SkillForgeApplication {
 	}
 
 	@Bean
-	ObjectMetadata objectMetadata() {
+	public ObjectMetadata objectMetadata() {
 		return new ObjectMetadata();
 	}
 
 	@Bean
-	ObjectMapper objectMapper() {
+	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
 	}
 
-	private static void loadProperties() {
+	public static void loadProperties() {
 		Dotenv dotenv = Dotenv.load();
 		System.setProperty("AWS_ACCESS_KEY",dotenv.get("AWS_ACCESS_KEY"));
 		System.setProperty("AWS_SECRET_KEY",dotenv.get("AWS_SECRET_KEY"));
