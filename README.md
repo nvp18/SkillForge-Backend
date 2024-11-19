@@ -102,15 +102,59 @@ Ensure the following are installed:
     mvn verify
 
 
-### Routing
-The application uses React Router for navigation. Key routes include:
+### APIs
+The application has RESTApi's through which we can communicate with the application. They are as follows: 
 
-- /login: User login page.
-- /dashboard: Dashboard for both Admins and Employees.
-- /admin/create-course: Admin creates a new course.
-- /course/:courseId: Course-specific details for both Admins and Employees.
-- /course/:courseId/modules: List of course modules.
-- /course/:courseId/quiz: Quiz management.
-- /course/:courseId/announcements: Course announcements.
-- /course/:courseId/discussions: Discussion threads.
-- /concerns: Manage and respond to concerns.
+# API Endpoints
+
+| API Endpoint | Request Type | Role |
+|--------------|--------------|------|
+| `/api/admin/getAllConcerns` | GET | ADMIN |
+| `/api/admin/replyToConcern/{concernId}` | POST | ADMIN |
+| `/api/admin/postAnnouncement/{courseId}` | POST | ADMIN |
+| `/api/admin/getAllAnnouncements/{courseId}` | GET | ADMIN |
+| `/api/admin/editAnnouncement/{announcementId}` | PUT | ADMIN |
+| `/api/admin/deleteAnnouncement/{announcementId}` | DELETE | ADMIN |
+| `/api/admin/getAnnouncement/{announcementId}` | GET | ADMIN |
+| `/api/course/createCourse` | POST | ADMIN |
+| `/api/course/updateCourse/{courseId}` | PUT | ADMIN |
+| `/api/course/deleteCourse/{courseId}` | DELETE | ADMIN |
+| `/api/course/getAllCourses` | GET | ADMIN |
+| `/api/course/uploadCourseModule/{courseId}` | POST | ADMIN |
+| `/api/course/getCourseModules/{courseId}` | GET | ADMIN, EMPLOYEE |
+| `/api/course/getModuleContent/{moduleId}` | GET | ADMIN, EMPLOYEE |
+| `/api/course/deleteCourseModule/{moduleId}` | DELETE | ADMIN |
+| `/api/course/updateCourseModule/{moduleId}` | PUT | ADMIN |
+| `/api/course/getCourseDetails/{courseID}` | GET | ADMIN, EMPLOYEE |
+| `/api/course/assignCourseToEmployee/{courseId}/{employeeId}` | POST | ADMIN |
+| `/api/course/deassignCourseToEmployee/{courseId}/{employeeId}` | DELETE | ADMIN |
+| `/api/course/createQuiz/{courseId}` | POST | ADMIN |
+| `/api/course/deleteQuiz/{quizId}` | DELETE | ADMIN |
+| `/api/course/deleteQuestion/{questionId}` | DELETE | ADMIN |
+| `/api/course/getQuiz/{courseId}` | GET | ADMIN, EMPLOYEE |
+| `/api/course/getQuestions/{quizId}` | GET | ADMIN, EMPLOYEE |
+| `/api/course/postDiscussion/{courseId}` | POST | ADMIN, EMPLOYEE |
+| `/api/course/replyToDiscussion/{discussionId}` | POST | ADMIN, EMPLOYEE |
+| `/api/course/getAllDiscussions/{courseId}` | GET | ADMIN, EMPLOYEE |
+| `/api/course/deleteDiscussion/{discussionId}` | DELETE | ADMIN |
+| `/api/course/getAllCoursesOfEmployee/{employeeId}` | GET | ADMIN |
+| `/api/course/submitQuiz/{courseId}` | POST | ADMIN, EMPLOYEE |
+| `/api/employee/getAllEmployeeCourses` | GET | EMPLOYEE |
+| `/api/employee/getConcerns` | GET | EMPLOYEE |
+| `/api/employee/raiseConcern` | POST | EMPLOYEE |
+| `/api/employee/replyToConcern/{concernId}` | POST | EMPLOYEE |
+| `/api/employee/getAllAnnouncements/{courseId}` | GET | EMPLOYEE |
+| `/api/employee/getAnnouncement/{announcementId}` | GET | EMPLOYEE |
+| `/api/employee/updateModuleCompleted/{moduleId}/{courseId}` | POST | EMPLOYEE |
+| `/api/employee/getQuiz/{courseId}` | GET | EMPLOYEE |
+| `/api/employee/startCourse/{courseId}` | POST | EMPLOYEE |
+| `/api/employee/viewProgress/{employeeId}/{courseId}` | GET | ADMIN, EMPLOYEE |
+| `/api/employee/getModuleStatus/{courseId}` | GET | EMPLOYEE |
+| `/api/employee/getCourseStatus/{courseId}` | GET | EMPLOYEE |
+| `/api/user/login` | POST | ADMIN, EMPLOYEE |
+| `/api/user/createUser` | POST | ADMIN |
+| `/api/user/viewProfile` | GET | ADMIN, EMPLOYEE |
+| `/api/user/updateProfile` | PUT | ADMIN, EMPLOYEE |
+| `/api/user/changePassword` | PUT | ADMIN, EMPLOYEE |
+| `/api/user/getAllEmployees` | GET | ADMIN |
+
