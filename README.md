@@ -158,3 +158,197 @@ The application has RESTApi's through which we can communicate with the applicat
 | `/api/user/changePassword` | PUT | ADMIN, EMPLOYEE |
 | `/api/user/getAllEmployees` | GET | ADMIN |
 
+### DataBase Schema 
+
+
+# SkillForge Database Schema Documentation
+
+## Database Overview
+
+This document outlines the schema for the `SkillForge` application. The database is built using PostgreSQL, designed to handle user management, course management, quizzes, announcements, discussions, and progress tracking.
+
+---
+
+## Table Schemas
+
+### 1. **Users Table**
+The `Users` table stores information about all users in the system, including Admins and Employees.
+
+| Column Name | Data Type | Constraints                |
+|-------------|-----------|----------------------------|
+| userid      | VARCHAR   | PRIMARY KEY                |
+| username    | VARCHAR   | NOT NULL, UNIQUE           |
+| firstname   | VARCHAR   | NOT NULL                   |
+| lastname    | VARCHAR   | NOT NULL                   |
+| email       | VARCHAR   | NOT NULL, UNIQUE           |
+| password    | VARCHAR   | NOT NULL                   |
+| role        | VARCHAR   | NOT NULL                   |
+
+---
+
+### 2. **Course Table**
+The `Course` table manages the details of all courses offered.
+
+| Column Name     | Data Type | Constraints     |
+|-----------------|-----------|-----------------|
+| courseid        | VARCHAR   | PRIMARY KEY     |
+| coursename      | VARCHAR   | NOT NULL, UNIQUE|
+| coursedescription | VARCHAR | NOT NULL        |
+| coursetags      | VARCHAR   | NOT NULL        |
+| createdat       | TIMESTAMP | NOT NULL        |
+| updatedat       | TIMESTAMP | NOT NULL        |
+| daystofinish    | INT       | NOT NULL        |
+| coursedirectory | VARCHAR   | NOT NULL        |
+
+---
+
+### 3. **EmployeeCourse Table**
+Tracks course assignments and progress for employees.
+
+| Column Name   | Data Type | Constraints                       |
+|---------------|-----------|-----------------------------------|
+| id            | VARCHAR   | PRIMARY KEY                       |
+| assignedat    | TIMESTAMP | NOT NULL                          |
+| duedate       | TIMESTAMP | NOT NULL                          |
+| status        | VARCHAR   | NOT NULL                          |
+| quizcompleted | BOOLEAN   | NOT NULL                          |
+| employeeid    | VARCHAR   | NOT NULL, FOREIGN KEY (users)     |
+| courseid      | VARCHAR   | FOREIGN KEY (course)              |
+
+---
+
+### 4. **Concern Table**
+Stores concerns raised by employees.
+
+| Column Name | Data Type | Constraints                   |
+|-------------|-----------|-------------------------------|
+| id          | VARCHAR   | PRIMARY KEY                   |
+| createdat   | TIMESTAMP | NOT NULL                      |
+| subject     | TEXT      | NOT NULL                      |
+| description | TEXT      | NOT NULL                      |
+| status      | VARCHAR   | NOT NULL                      |
+| employeeid  | VARCHAR   | FOREIGN KEY (users)           |
+
+---
+
+### 5. **ConcernReply Table**
+Tracks replies to concerns raised by employees.
+
+| Column Name | Data Type | Constraints                 |
+|-------------|-----------|-----------------------------|
+| id          | VARCHAR   | PRIMARY KEY                 |
+| reply       | TEXT      | NOT NULL                    |
+| repliedat   | TIMESTAMP | NOT NULL                    |
+| repliedby   | VARCHAR   | NOT NULL                    |
+| concernid   | VARCHAR   | FOREIGN KEY (concern)       |
+
+---
+
+### 6. **Announcement Table**
+Stores course-related announcements.
+
+| Column Name | Data Type | Constraints              |
+|-------------|-----------|--------------------------|
+| id          | VARCHAR   | PRIMARY KEY              |
+| title       | VARCHAR   | NOT NULL                 |
+| description | TEXT      | NOT NULL                 |
+| createdat   | TIMESTAMP | NOT NULL                 |
+| updatedat   | TIMESTAMP | NOT NULL                 |
+| createdby   | VARCHAR   | NOT NULL                 |
+| courseid    | VARCHAR   | FOREIGN KEY (course)     |
+
+---
+
+### 7. **UserToken Table**
+Manages authentication tokens for users.
+
+| Column Name | Data Type | Constraints              |
+|-------------|-----------|--------------------------|
+| id          | VARCHAR   | PRIMARY KEY              |
+| token       | VARCHAR   | NOT NULL                 |
+| userid      | VARCHAR   | FOREIGN KEY (users)      |
+| expired     | BOOLEAN   | NOT NULL                 |
+| revoked     | BOOLEAN   | NOT NULL                 |
+
+---
+
+### 8. **Module Table**
+Stores details about course modules.
+
+| Column Name   | Data Type | Constraints               |
+|---------------|-----------|---------------------------|
+| moduleId      | VARCHAR   | PRIMARY KEY               |
+| moduleName    | VARCHAR   | NOT NULL, UNIQUE          |
+| createdAt     | TIMESTAMP | NOT NULL                  |
+| updatedAt     | TIMESTAMP | NOT NULL                  |
+| modulecontent | VARCHAR   | NOT NULL                  |
+| modulenumber  | INT       | NOT NULL                  |
+| courseid      | VARCHAR   | FOREIGN KEY (course)      |
+
+---
+
+### 9. **Quiz Table**
+Holds quiz questions for each course.
+
+| Column Name | Data Type | Constraints                 |
+|-------------|-----------|-----------------------------|
+| id          | VARCHAR   | PRIMARY KEY                 |
+| question    | VARCHAR   | NOT NULL                    |
+| option1     | VARCHAR   | NOT NULL                    |
+| option2     | VARCHAR   | NOT NULL                    |
+| option3     | VARCHAR   | NOT NULL                    |
+| option4     | VARCHAR   | NOT NULL                    |
+| correctans  | VARCHAR   | NOT NULL                    |
+| courseid    | VARCHAR   | FOREIGN KEY (course)        |
+
+---
+
+### 10. **Discussions Table**
+Handles course-specific discussion threads.
+
+| Column Name | Data Type | Constraints             |
+|-------------|-----------|-------------------------|
+| id          | VARCHAR   | PRIMARY KEY             |
+| title       | VARCHAR   | NOT NULL                |
+| description | TEXT      | NOT NULL                |
+| createdat   | TIMESTAMP | NOT NULL                |
+| createdby   | VARCHAR   | NOT NULL                |
+| courseid    | VARCHAR   | FOREIGN KEY (course)    |
+
+---
+
+### 11. **DiscussionReply Table**
+Tracks replies to discussion threads.
+
+| Column Name | Data Type | Constraints                |
+|-------------|-----------|----------------------------|
+| id          | VARCHAR   | PRIMARY KEY                |
+| repliedby   | VARCHAR   | NOT NULL                   |
+| reply       | TEXT      | NOT NULL                   |
+| repliedat   | TIMESTAMP | NOT NULL                   |
+| discussionid| VARCHAR   | FOREIGN KEY (discussions)  |
+
+---
+
+### 12. **EmployeeCourseProgress Table**
+Tracks module completion within a course.
+
+| Column Name      | Data Type | Constraints                     |
+|------------------|-----------|---------------------------------|
+| id               | VARCHAR   | PRIMARY KEY                     |
+| employeecourseid | VARCHAR   | FOREIGN KEY (employeecourse)    |
+| moduleid         | VARCHAR   | FOREIGN KEY (module)            |
+| iscompleted      | BOOLEAN   |                                 |
+
+---
+
+### 13. **CourseQuiz Table**
+Links quizzes to specific courses.
+
+| Column Name | Data Type | Constraints              |
+|-------------|-----------|--------------------------|
+| id          | VARCHAR   | PRIMARY KEY              |
+| title       | VARCHAR   | NOT NULL                 |
+| description | VARCHAR   | NOT NULL                 |
+| courseid    | VARCHAR   | FOREIGN KEY (course)     |
+
