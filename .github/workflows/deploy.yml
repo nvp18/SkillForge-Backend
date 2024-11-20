@@ -17,8 +17,8 @@ jobs:
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > test1.pem
           chmod 600 test1.pem
-          mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist
-          ssh-keyscan -H 3.228.66.243 >> ~/.ssh/known_hosts  # Add EC2 instance to known_hosts
+          mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist on GitHub runner
+          ssh-keyscan -H 3.228.66.243 >> ~/.ssh/known_hosts  # Add EC2 to known_hosts
           eval "$(ssh-agent -s)"
           ssh-add test1.pem
 
@@ -29,10 +29,9 @@ jobs:
             cd /home/ubuntu/SkillForge-Backend || git clone git@github.com:nvp18/SkillForge-Backend.git /home/ubuntu/SkillForge-Backend
             cd /home/ubuntu/SkillForge-Backend
 
-            # Pull latest code and build the project
+            # Pull latest code and restart backend service
             git pull origin main
+            mvn spring-boot:stop || echo "Service not running"
             mvn clean install
+            nohup mvn spring-boot:run &
           EOF
-
-      - name: Deployment Completed
-        run: echo "Deployment job completed successfully!"
