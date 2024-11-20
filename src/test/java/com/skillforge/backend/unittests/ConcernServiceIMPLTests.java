@@ -183,6 +183,9 @@ class ConcernServiceIMPLTests {
 	void testGetAllConcerns() {
 		// Arrange
 		Concerns mockConcern = new Concerns();
+		User user = new User();
+		user.setUsername("sample");
+		mockConcern.setUser(user);
 		mockConcern.setCreatedat(LocalDateTime.now());
 		when(concernRepository.findAll()).thenReturn(List.of(mockConcern));
 

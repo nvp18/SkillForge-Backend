@@ -26,4 +26,6 @@ public class ConcernDTO {
 
     private List<ReplyDTO> concernReplies;
 
+    private String createdBy;
+
 }

@@ -79,6 +79,7 @@ public class ObjectMappers {
                 .createdat(concerns.getCreatedat().toString())
                 .id(concerns.getId())
                 .concernReplies(replyDTOs)
+                .createdBy(concerns.getUser().getUsername())
                 .build();
     }
 
