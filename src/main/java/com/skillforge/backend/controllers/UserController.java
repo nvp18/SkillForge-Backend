@@ -21,7 +21,7 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UserService userService; 
 
     @PostMapping("/login")
     public ResponseEntity<Map<String,Object>> login(@RequestBody UserDTO userDTO) {
